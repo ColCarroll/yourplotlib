@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Building a maintainable plotting library</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/simple.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h3>Building a maintainable plotting library</h3>
+                <p>
+                    <img data-src="img/logo.png" />
+                </p>
+
+                <div id="left">
+                    <!-- Can put a logo or something here-->
+                    <!-- <img data-src="img/logo-red-new.png" /> -->
+                </div>
+                <div id="right">
+                    <p style="text-align: right" class="subtitle"><a href="https://colindcarroll.com/">Colin
+                            Carroll</a></p>
+                </div>
+            </section>
+
+            <section>
+                <h3>Slides are online!</h3>
+                <p><a
+                        href="https://build_a_plotting_library.colindcarroll.com">build_a_plotting_library.colindcarroll.com</a>
+                    <p>Code is also available <a href="TODO: THIS">here.</a>
+                        <br>
+                        <p>Many thanks to the Matplotlib team and contributors.</p>
+
+            </section>
+
+            <section>
+                <h3>PyMC3 Syntax</h3>
+                <!-- leaving this as an example of code -->
+                <pre><code data-trim data-noescape>
+import pymc3 as pm
+
+with my_model:  # defined earlier
+    trace = pm.sample()  # ✨✨magic✨✨
+</code></pre>
+            </section>
+        </div>
+    </div>
+
+    <script src="js/reveal.js"></script>
+
+    <script>
+        // More info about config & dependencies:
+        // - https://github.com/hakimel/reveal.js#configuration
+        // - https://github.com/hakimel/reveal.js#dependencies
+        Reveal.initialize({
+            dependencies: [{
+                    src: 'plugin/markdown/marked.js'
+                },
+                {
+                    src: 'plugin/markdown/markdown.js'
+                },
+                {
+                    src: 'plugin/notes/notes.js',
+                    async: true
+                },
+                {
+                    src: 'plugin/highlight/highlight.js',
+                    async: true
+                },
+                {
+                    src: 'plugin/math/math.js',
+                    async: true
+                },
+            ],
+            history: true,
+            math: {
+                mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+            },
+        });
+    </script>
+</body>
+
+</html>
