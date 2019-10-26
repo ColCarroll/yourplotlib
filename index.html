@@ -55,15 +55,135 @@
             </section>
 
             <section>
-                <h3>PyMC3 Syntax</h3>
-                <!-- leaving this as an example of code -->
+                <h3>Set a stylish default</h3>
                 <pre><code data-trim data-noescape>
-import pymc3 as pm
+import matplotlib.pyplot as plt
 
-with my_model:  # defined earlier
-    trace = pm.sample()  # ✨✨magic✨✨
+plt.plot(*np.random.randn(50, 2))
+</code></pre>
+                <p>
+                    <img data-src="img/style1.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code data-trim data-noescape>
+plt.rcParams.update({
+    "axes.prop_cycle": plt.cycler(
+        "color",
+        ["#EE9041", "#459DB9", "#667B83"]),
+})
+</code></pre>
+                <p>
+                    <img data-src="img/style2.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code data-trim data-noescape>
+plt.rcParams.update({
+    "figure.figsize": [10.0, 3.0],
+})
+</code></pre>
+                <p>
+                    <img data-src="img/style3.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code data-trim data-noescape>
+plt.rcParams.update({
+    "lines.marker": "d",
+})
+</code></pre>
+                <p>
+                    <img data-src="img/style4.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code data-trim data-noescape>
+plt.rcParams.update({
+    "lines.linestyle": "",
+})
+</code></pre>
+                <p>
+                    <img data-src="img/style5.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code data-trim data-noescape>
+plt.rcParams.update({
+    "lines.markersize": 48.0,
+})
+</code></pre>
+                <p>
+                    <img data-src="img/style6.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code data-trim data-noescape>
+plt.rcParams.update({
+    "axes.spines.bottom": False,
+    "axes.spines.top": False,
+    "axes.spines.left": False,
+    "axes.spines.right": False,
+    "xtick.major.bottom": False,
+    "ytick.major.left": False,
+})
+</code></pre>
+                <p>
+                    <img data-src="img/style7.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code data-trim data-noescape>
+plt.rcParams.update({
+    "lines.markeredgecolor": "black",
+})
+</code></pre>
+                <p>
+                    <img data-src="img/style8.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code data-trim data-noescape>
+x = np.linspace(-2, 2)
+plt.plot(x, np.cos(2 * x))
+plt.plot(x, np.sin(2 * x))
+plt.plot(x, -np.cos(2 * x))
+</code></pre>
+                <p>
+                    <img data-src="img/style9.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Save your styles</h3>
+                <pre><code data-trim data-noescape>
+from pathlib import Path
+print(Path(matplotlib.get_configdir()) / "stylelib")
+# Create file "my_style.mplstyle"
+</code></pre>
+                <pre><code data-trim data-noescape>
+import matplotlib.pyplot as plt
+
+plt.style.use("my_style")  # all set!
 </code></pre>
             </section>
+
         </div>
     </div>
 
