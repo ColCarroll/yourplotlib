@@ -74,6 +74,7 @@ plt.rcParams.update({
         "color",
         ["#EE9041", "#459DB9", "#667B83"]),
 })
+plt.plot(*np.random.randn(50, 2))
 </code></pre>
                 <p>
                     <img data-src="img/style2.png" />
@@ -86,6 +87,7 @@ plt.rcParams.update({
 plt.rcParams.update({
     "figure.figsize": [10.0, 3.0],
 })
+plt.plot(*np.random.randn(50, 2))
 </code></pre>
                 <p>
                     <img data-src="img/style3.png" />
@@ -98,6 +100,7 @@ plt.rcParams.update({
 plt.rcParams.update({
     "lines.marker": "d",
 })
+plt.plot(*np.random.randn(50, 2))
 </code></pre>
                 <p>
                     <img data-src="img/style4.png" />
@@ -110,6 +113,7 @@ plt.rcParams.update({
 plt.rcParams.update({
     "lines.linestyle": "",
 })
+plt.plot(*np.random.randn(50, 2))
 </code></pre>
                 <p>
                     <img data-src="img/style5.png" />
@@ -122,6 +126,7 @@ plt.rcParams.update({
 plt.rcParams.update({
     "lines.markersize": 48.0,
 })
+plt.plot(*np.random.randn(50, 2))
 </code></pre>
                 <p>
                     <img data-src="img/style6.png" />
@@ -139,6 +144,7 @@ plt.rcParams.update({
     "xtick.major.bottom": False,
     "ytick.major.left": False,
 })
+plt.plot(*np.random.randn(50, 2))
 </code></pre>
                 <p>
                     <img data-src="img/style7.png" />
@@ -151,6 +157,7 @@ plt.rcParams.update({
 plt.rcParams.update({
     "lines.markeredgecolor": "black",
 })
+plt.plot(*np.random.randn(50, 2))
 </code></pre>
                 <p>
                     <img data-src="img/style8.png" />
@@ -183,6 +190,169 @@ import matplotlib.pyplot as plt
 plt.style.use("my_style")  # all set!
 </code></pre>
             </section>
+
+            <section>
+                <h3>Build custom plots with Artists</h3>
+                <p>
+                    <img width=400 data-src="img/original.png" />
+                    <img width=400 data-src="img/final.png" />
+                </p>
+            </section>
+
+            <section data-background-image="img/original_color.png">
+            </section>
+
+            <section data-background-image="img/original.png">
+            </section>
+
+            <section data-background-image="img/mask.png">
+            </section>
+
+            <section data-background-image="img/pete_mask.png">
+            </section>
+
+            <section data-background-image="img/smooth_mask.png">
+            </section>
+
+            <section data-background-image="img/pete_smooth.png">
+            </section>
+
+            <section data-background-image="img/pete_thresh.png">
+            </section>
+
+            <section data-background-image="img/pete_zones.png">
+            </section>
+
+            <section data-background-image="img/pete_final_no_smooth.png">
+            </section>
+
+            <section data-background-image="img/pete_final_wide.png">
+            </section>
+
+            <section data-background-image="img/final.png">
+            </section>
+
+            <section data-background-image="img/final_color.png">
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape>
+fig, ax = plt.subplots(figsize=(10, 7))
+lc = LineCollection(
+    segments=[
+        ((0, 1), (1, 1), (2, 1), (3, 1)),
+        ((0, 1), (1, 2), (2, 3), (3, 4)),
+        ((0, 0), (1, 2), (2, 4), (3, 9)),
+    ],
+)
+ax.add_collection(lc)
+ax.set_ylim(0, 9)
+ax.set_xlim(0, 3)
+</code></pre>
+                <p>
+                    <img height=350 data-src="img/lc1.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape>
+...
+lc = LineCollection(
+    segments=...,
+    colors=('red', 'green', 'blue'),
+    linewidths=(4, 8, 12),
+    linestyles=('dashed', 'dotted', 'solid')
+
+)
+...
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc2.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape>
+...
+lc = LineCollection(
+    segments=[
+        ((0, 0), (1, 2)),
+        ((1, 2), (2, 4)),
+        ((2, 4), (3, 9))
+    ], ...
+)
+...
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc3.png" />
+                </p>
+            </section>
+
+            <section>
+                <h2>Getting the LineCollection working</h2>
+                <pre><code data-trim data-noescape>
+x = np.linspace(-2, 2)
+y = x ** 2
+
+points = np.vstack((x, y)).T
+# array([[-2.        ,  4.        ],
+#       [-1.91836735,  3.68013328],
+#       [-1.83673469,  3.37359434],
+#       [-1.75510204,  3.08038317],...
+segments = list(zip(points[:-1], points[1:]))
+</code></pre>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape>
+fig, ax = plt.subplots()
+
+lc = LineCollection(segments=segments)
+
+ax.add_collection(lc)
+ax.set_ylim(-0.2, 4)
+ax.set_xlim(-2, 2)
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc4.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape>
+linewidths = 30 * np.abs(np.sin(10 * x))
+...
+
+lc = LineCollection(
+    segments=segments,
+    linewidths=linewidths
+)
+...
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc5.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code data-trim data-noescape>
+cmap = plt.get_cmap('viridis')
+...
+
+lc = LineCollection(
+    segments=segments,
+    linewidths=linewidths,
+    colors=cmap(np.abs(np.sin(5 * x))),
+)
+...
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc6.png" />
+                </p>
+            </section>
+
+
+
 
         </div>
     </div>
