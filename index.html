@@ -55,6 +55,65 @@
             </section>
 
             <section>
+                <h3>Style sheets</h3>
+                <pre><code data-trim data-noescape>
+import matplotlib.pyplot as plt
+
+plt.style.use('default')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/default.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Style sheets</h3>
+                <pre><code data-trim data-noescape>
+plt.style.use('classic')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/classic.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Style sheets</h3>
+                <pre><code data-trim data-noescape>
+plt.style.use('ggplot')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/ggplot.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Style sheets</h3>
+                <pre><code data-trim data-noescape>
+plt.style.use('fivethirtyeight')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/fivethirtyeight.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Style sheets</h3>
+                <pre><code data-trim data-noescape>
+plt.style.use('tufte')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/tufte.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Be bold.</h3>
+                <p>
+                    <img data-src="img/bins.png" />
+                </p>
+            </section>
+
+            <section>
                 <h3>Set a stylish default</h3>
                 <pre><code data-trim data-noescape>
 import matplotlib.pyplot as plt
@@ -126,7 +185,7 @@ plt.plot(*np.random.randn(50, 2))
 plt.rcParams.update({
     "lines.markersize": 48.0,
 })
-plt.plot(*np.random.randn(50, 2))
+plt.plot(*np.random.randn(50, 2), clip_on=False)
 </code></pre>
                 <p>
                     <img data-src="img/style6.png" />
@@ -144,7 +203,7 @@ plt.rcParams.update({
     "xtick.major.bottom": False,
     "ytick.major.left": False,
 })
-plt.plot(*np.random.randn(50, 2))
+plt.plot(*np.random.randn(50, 2), clip_on=False)
 </code></pre>
                 <p>
                     <img data-src="img/style7.png" />
@@ -157,7 +216,7 @@ plt.plot(*np.random.randn(50, 2))
 plt.rcParams.update({
     "lines.markeredgecolor": "black",
 })
-plt.plot(*np.random.randn(50, 2))
+plt.plot(*np.random.randn(50, 2), clip_on=False)
 </code></pre>
                 <p>
                     <img data-src="img/style8.png" />
@@ -167,10 +226,10 @@ plt.plot(*np.random.randn(50, 2))
             <section>
                 <h3>Set a stylish default</h3>
                 <pre><code data-trim data-noescape>
-x = np.linspace(-2, 2)
-plt.plot(x, np.cos(2 * x))
-plt.plot(x, np.sin(2 * x))
-plt.plot(x, -np.cos(2 * x))
+x = np.linspace(-4, 4)
+plt.plot(x, np.cos(x), clip_on=False)
+plt.plot(x, np.sin(x), clip_on=False)
+plt.plot(x, -np.cos(x), clip_on=False)
 </code></pre>
                 <p>
                     <img data-src="img/style9.png" />
@@ -180,15 +239,19 @@ plt.plot(x, -np.cos(2 * x))
             <section>
                 <h3>Save your styles</h3>
                 <pre><code data-trim data-noescape>
+import matplotlib.pyplot as plt
+# Check out available keys
+print(plt.rcParams)
+
+# Find where to put your style file
 from pathlib import Path
 print(Path(matplotlib.get_configdir()) / "stylelib")
 # Create file "my_style.mplstyle"
-</code></pre>
-                <pre><code data-trim data-noescape>
-import matplotlib.pyplot as plt
 
+# Use the custom style
 plt.style.use("my_style")  # all set!
 </code></pre>
+                <p>...You can also pip install styles if you are careful</p>
             </section>
 
             <section>
