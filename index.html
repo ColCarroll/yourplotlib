@@ -29,6 +29,9 @@
     <div class="reveal">
         <div class="slides">
             <section>
+                <h1>
+                    <pre style="text-align: center;"><code>yourplotlib</code></pre>
+                </h1>
                 <h3>Building a maintainable plotting library</h3>
                 <p>
                     <img data-src="img/logo.png" />
@@ -39,16 +42,16 @@
                     <!-- <img data-src="img/logo-red-new.png" /> -->
                 </div>
                 <div id="right">
-                    <p style="text-align: right" class="subtitle"><a href="https://colindcarroll.com/">Colin
-                            Carroll</a></p>
+                    <p style="text-align: right" class="subtitle">Colin Carroll</p>
+                    <p style="text-align: right" class="subtitle"><a
+                            href="https://colindcarroll.com/">colindcarroll.com</a></p>
                 </div>
             </section>
 
             <section>
                 <h3>Slides are online!</h3>
-                <p><a
-                        href="https://build_a_plotting_library.colindcarroll.com">build_a_plotting_library.colindcarroll.com</a>
-                    <p>Code is also available <a href="TODO: THIS">here.</a>
+                <p><a href="https://colcarroll.github.io/yourplotlib">colcarroll.github.io/yourplotlib</a>
+                    <p>Code is also available <a href="https://github.com/ColCarroll/yourplotlib">here.</a>
                         <br>
                         <p>Many thanks to the Matplotlib team and contributors.</p>
 
@@ -56,7 +59,7 @@
 
             <section>
                 <h3>Style sheets</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 import matplotlib.pyplot as plt
 
 plt.style.use('default')
@@ -68,7 +71,7 @@ plt.style.use('default')
 
             <section>
                 <h3>Style sheets</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.style.use('classic')
 </code></pre>
                 <p>
@@ -78,7 +81,7 @@ plt.style.use('classic')
 
             <section>
                 <h3>Style sheets</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.style.use('ggplot')
 </code></pre>
                 <p>
@@ -88,7 +91,7 @@ plt.style.use('ggplot')
 
             <section>
                 <h3>Style sheets</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.style.use('fivethirtyeight')
 </code></pre>
                 <p>
@@ -98,7 +101,7 @@ plt.style.use('fivethirtyeight')
 
             <section>
                 <h3>Style sheets</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.style.use('tufte')
 </code></pre>
                 <p>
@@ -115,7 +118,7 @@ plt.style.use('tufte')
 
             <section>
                 <h3>Set a stylish default</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 import matplotlib.pyplot as plt
 
 plt.plot(*np.random.randn(50, 2))
@@ -127,7 +130,7 @@ plt.plot(*np.random.randn(50, 2))
 
             <section>
                 <h3>Set a stylish default</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.rcParams.update({
     "axes.prop_cycle": plt.cycler(
         "color",
@@ -142,7 +145,7 @@ plt.plot(*np.random.randn(50, 2))
 
             <section>
                 <h3>Set a stylish default</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.rcParams.update({
     "figure.figsize": [10.0, 3.0],
 })
@@ -155,7 +158,7 @@ plt.plot(*np.random.randn(50, 2))
 
             <section>
                 <h3>Set a stylish default</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.rcParams.update({
     "lines.marker": "d",
 })
@@ -168,7 +171,7 @@ plt.plot(*np.random.randn(50, 2))
 
             <section>
                 <h3>Set a stylish default</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.rcParams.update({
     "lines.linestyle": "",
 })
@@ -181,7 +184,7 @@ plt.plot(*np.random.randn(50, 2))
 
             <section>
                 <h3>Set a stylish default</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.rcParams.update({
     "lines.markersize": 48.0,
 })
@@ -194,7 +197,7 @@ plt.plot(*np.random.randn(50, 2), clip_on=False)
 
             <section>
                 <h3>Set a stylish default</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.rcParams.update({
     "axes.spines.bottom": False,
     "axes.spines.top": False,
@@ -212,7 +215,7 @@ plt.plot(*np.random.randn(50, 2), clip_on=False)
 
             <section>
                 <h3>Set a stylish default</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 plt.rcParams.update({
     "lines.markeredgecolor": "black",
 })
@@ -225,7 +228,7 @@ plt.plot(*np.random.randn(50, 2), clip_on=False)
 
             <section>
                 <h3>Set a stylish default</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 x = np.linspace(-4, 4)
 plt.plot(x, np.cos(x), clip_on=False)
 plt.plot(x, np.sin(x), clip_on=False)
@@ -238,7 +241,7 @@ plt.plot(x, -np.cos(x), clip_on=False)
 
             <section>
                 <h3>Save your styles</h3>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 import matplotlib.pyplot as plt
 # Check out available keys
 print(plt.rcParams)
@@ -299,13 +302,13 @@ plt.style.use("my_style")  # all set!
             </section>
 
             <section>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 fig, ax = plt.subplots(figsize=(10, 7))
 lc = LineCollection(
     segments=[
-        ((0, 1), (1, 1), (2, 1), (3, 1)),
-        ((0, 1), (1, 2), (2, 3), (3, 4)),
-        ((0, 0), (1, 2), (2, 4), (3, 9)),
+        ((0, 1), (1, 1), (2, 1), (3, 1)), # flat line
+        ((0, 1), (1, 2), (2, 3), (3, 4)), # straight line
+        ((0, 0), (1, 2), (2, 4), (3, 9)), # parabola
     ],
 )
 ax.add_collection(lc)
@@ -318,7 +321,7 @@ ax.set_xlim(0, 3)
             </section>
 
             <section>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 ...
 lc = LineCollection(
     segments=...,
@@ -335,7 +338,7 @@ lc = LineCollection(
             </section>
 
             <section>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 ...
 lc = LineCollection(
     segments=[
@@ -353,7 +356,7 @@ lc = LineCollection(
 
             <section>
                 <h2>Getting the LineCollection working</h2>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 x = np.linspace(-2, 2)
 y = x ** 2
 
@@ -367,7 +370,7 @@ segments = list(zip(points[:-1], points[1:]))
             </section>
 
             <section>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 fig, ax = plt.subplots()
 
 lc = LineCollection(segments=segments)
@@ -382,7 +385,7 @@ ax.set_xlim(-2, 2)
             </section>
 
             <section>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 linewidths = 30 * np.abs(np.sin(10 * x))
 ...
 
@@ -398,7 +401,7 @@ lc = LineCollection(
             </section>
 
             <section>
-                <pre><code data-trim data-noescape>
+                <pre><code class="python" data-trim data-noescape>
 cmap = plt.get_cmap('viridis')
 ...
 
@@ -414,7 +417,58 @@ lc = LineCollection(
                 </p>
             </section>
 
+            <section>
+                <h3>Light wrappers for your use</h3>
+                <pre><code class="python" data-trim data-noescape>
+def plot_line(x, y, linewidths=None, colors=None, ax=None):
+    points = np.vstack((x, y)).T
+    segments = list(zip(points[:-1], points[1:]))
+    if ax is None:
+        ax = plt.gca()
 
+    lc = LineCollection(
+        segments=segments,
+        linewidths=linewidths,
+        colors=colors,
+    )
+    ax.add_collection(lc)
+    #  ...mess with scales...
+    return lc
+</code></pre>
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+x = np.linspace(-2, 2)
+y = x ** 2
+linewidths = 30 * np.abs(np.sin(10 * x))
+colors = plt.get_cmap('viridis')(np.abs(np.sin(5 * x)))
+
+# Our custom function!
+plot_line(x, y,
+          linewidths=linewidths,
+          colors=colors)
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc7.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+t = np.linspace(0, np.pi * 2.0, 2_000)
+cmap = plt.get_cmap('rainbow')
+colors = cmap(np.abs(np.cos(t * 1.25)))
+
+plot_line(np.cos(t), np.sin(t), # circle
+          linewidths=40 * np.cos(1.5 * t), # 3 turns
+          colors=colors)
+ax.axis('off')
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc8.png" />
+                </p>
+            </section>
 
 
         </div>
