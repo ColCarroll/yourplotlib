@@ -248,14 +248,12 @@ print(plt.rcParams)
                     Convert output to RcParams format:
                 </p>
                 <pre class='fragment'>
-    ......
     font.family: serif
     figure.facecolor: #fffff8
     axes.facecolor: #fffff8
     font.size: 14.0
     hist.bins: auto
-    ....
-    'lines.markersize': 8.0,
+    lines.markersize: 8.0
 </pre>
                 <p class='fragment'>
                     Save to "<em>my_style</em>.mplstyle" </br>
@@ -299,8 +297,10 @@ def solitare(x, ax=None, **kwargs):
     if ax is None:
         ax = plt.gca()
     kwargs.setdefault('clip_on', False)
-    my_artists = ax.plot(x, np.cos(x), x, np.sin(x),
-                         x, -np.cos(x), **kwargs)
+    my_artists = ax.plot(x, np.cos(x),
+                         x, np.sin(x),
+                         x, -np.cos(x),
+                         **kwargs)
     return my_artists
 </code></pre>
             </section>
@@ -333,18 +333,17 @@ _ = confetti(42)
                 <img height=300 data-src="img/combined_axis.png" />
             </section>
 
-    <section>
-    <h3>Share Your Library </h3>
-    <p>Package like any /p>
-    <a href=https://discourse.matplotlib.org/c/development/3rdparty>discourse.matplotlib.org/c/development/3rdparty</a>
-    </section>
-    
             <section>
-                <h3>Build custom plots with Artists</h3>
-                <p>
-                    <img width=400 data-src="img/original.png" />
-                    <img width=400 data-src="img/final.png" />
-                </p>
+                <h3>Share Your Library </h3>
+                <p>Package like any standard Python package 🙃</p>
+                <p>We love to help:</p>
+                <a href=https://discourse.matplotlib.org/c/development/3rdparty>discourse.matplotlib.org/c/development/3rdparty
+                    </a> </section> <section>
+                    <h3>Build custom plots with Artists</h3>
+                    <p>
+                        <img width=450 data-src="img/original_color.png" />
+                        <img width=450 data-src="img/final.png" />
+                    </p>
             </section>
 
             <section data-background-image="img/original_color.png">
@@ -582,6 +581,7 @@ ax.axis('off')
                         listing</a></p>
 
             </section>
+
             <section>
                 <h2>Build the interface you need</h2>
 
