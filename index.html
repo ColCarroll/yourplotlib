@@ -29,13 +29,10 @@
     <div class="reveal">
         <div class="slides">
             <section>
+                <h3>Building a maintainable plotting library</h3>
                 <h1>
                     <pre style="text-align: center;"><code>yourplotlib</code></pre>
                 </h1>
-                <h3>Building a maintainable plotting library</h3>
-                <p>
-                    <img data-src="img/logo.png" />
-                </p>
 
                 <div id="left">
                     <!-- Can put a logo or something here-->
@@ -48,10 +45,13 @@
                 </div>
                 <div id="left">
                     <p style="text-align: left" class="subtitle">@matplotlib</p>
-                    <p syle="text-align: left" class="subtitle"><a 
-                        href="https://discourse.matplotlib.org/">discourse.matplotlib.org</a>
+                    <p syle="text-align: left" class="subtitle"><a
+                            href="https://discourse.matplotlib.org/">discourse.matplotlib.org</a>
                     </p>
                 </div>
+                <p>
+                    <img height=100 data-src="img/logo2_compressed.svg" />
+                </p>
             </section>
 
             <section>
@@ -112,13 +112,6 @@ plt.style.use('tufte')
 </code></pre>
                 <p>
                     <img height=450 data-src="img/tufte.png" />
-                </p>
-            </section>
-
-            <section>
-                <h3>Be bold.</h3>
-                <p>
-                    <img data-src="img/bins.png" />
                 </p>
             </section>
 
@@ -247,16 +240,16 @@ plt.plot(x, -np.cos(x), clip_on=False)
 
             <section>
                 <h3>Save your styles</h3>
-                 Print Configuration:
-<pre><code class="python" data-trim data-noescape>
+                Print Configuration:
+                <pre><code class="python" data-trim data-noescape>
 print(plt.rcParams)
 </pre></code>
-<p class="fragment">               
-Convert output to RcParams format:
-</p>
-<pre class='fragment'>
-    "axes.prop_cycle": plt.cycler("color", ['#000000', '#1b6989', 
-    '#e69f00', '#009e73', '#f0e442', 
+                <p class="fragment">
+                    Convert output to RcParams format:
+                </p>
+                <pre class='fragment'>
+    "axes.prop_cycle": plt.cycler("color", ['#000000', '#1b6989',
+    '#e69f00', '#009e73', '#f0e442',
     '#50b4e9', '#d55e00', '#cc79a7']),
     ......
     'font.family': 'serif',
@@ -265,78 +258,85 @@ Convert output to RcParams format:
     'font.size': 14.0,
     'hist.bins': 'auto',
     ....
-    'lines.markersize': 8.0, 
+    'lines.markersize': 8.0,
 </pre>
-<p class='fragment'>
-Save to "<em>my_style</em>.mplstyle" </br>
-</p> 
-</section>
+                <p class='fragment'>
+                    Save to "<em>my_style</em>.mplstyle" </br>
+                </p>
+            </section>
 
-<section>
-Move your style to the right place
-<pre><code code class="python" data-trim data-noescape></codw>
+            <section>
+                Move your style to the right place
+                <pre><code code class="python" data-trim data-noescape></codw>
 from pathlib import Path
 print(Path(matplotlib.get_configdir()) / "stylelib")
 </code></pre>
-</section>
-<section>
-Use your custom style:
-<pre><code  class="python" data-trim data-noescape>
+            </section>
+            <section>
+                Use your custom style:
+                <pre><code  class="python" data-trim data-noescape>
 plt.style.use("my_style")  # all set!
 </code></pre>
                 <p>...You can also pip install styles if you are careful</p>
             </section>
 
-<section>
-<h3>Wrap Your Plots</h3>
-<pre><code  class="python" data-trim data-noescape>
+            <section>
+                <h3>Be bold.</h3>
+                <p>
+                    <img data-src="img/bins.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Wrap Your Plots</h3>
+                <pre><code  class="python" data-trim data-noescape>
 def confetti(N, ax=None, **kwargs):
     if ax is None:
         ax = plt.gca()
-    my_artists = ax.plot(*np.random.randn(N, 2), 
+    my_artists = ax.plot(*np.random.randn(N, 2),
                          clip_on=False, **kwargs)
     return my_artists
 </code></pre>
-<pre class="fragment"><code class="python" data-trim data-noescape>
+                <pre class="fragment"><code class="python" data-trim data-noescape>
 def solitare(x, ax=None, **kwargs):
     if ax is None:
         ax = plt.gca()
     kwargs.setdefault('clip_on', False)
-    my_artists = ax.plot(x, np.cos(x), x, np.sin(x),x, -np.cos(x),
-                         **kwargs)
+    my_artists = ax.plot(x, np.cos(x), x, np.sin(x),
+                         x, -np.cos(x), **kwargs)
     return my_artists
 </code></pre>
-</section>
+            </section>
 
-<section>   
-<h3>Use Your New Plotting Methods </h3>
-<pre><code class="python" data-trim data-noescape>
+            <section>
+                <h3>Use Your New Plotting Methods </h3>
+                <pre><code class="python" data-trim data-noescape>
 _ = confetti(42)
 </code></pre>
-<img height=300 data-src="img/sparks.png"/>
-</section>
+                <img height=300 data-src="img/sparks.png" />
+            </section>
 
-<section>   
-        <h3>Customize Your Plots</h3>
-        <pre><code class="python" data-trim data-noescape>
+            <section>
+                <h3>Customize Your Plots</h3>
+                <pre><code class="python" data-trim data-noescape>
         _ = confetti(20, marker='*', markersize=50)
         _ = confetti(87, markersize=10)
         </code></pre>
-        <img height=300 data-src="img/multisparkles.png"/>
-</section>
+                <img height=300 data-src="img/multisparkles.png" />
+            </section>
 
-<section>
-    <h3>Compose Your Plots</h3>
-    <pre><code class="python" data-trim data-noescape>
+            <section>
+                <h3>Compose Your Plots</h3>
+                <pre><code class="python" data-trim data-noescape>
     fig, (ax1,ax2) = plt.subplots(nrows=2)
-    _ = solitare(np.linspace(-np.pi, np.pi), ax=ax1, 
+    _ = solitare(np.linspace(-np.pi, np.pi), ax=ax1,
                     markersize=30, marker='$\infty$')
     _ = confetti(13, ax=ax2, marker='>')
     </code></pre>
-    <img height=300 data-src="img/combined_axis.png"/>
-</section>
+                <img height=300 data-src="img/combined_axis.png" />
+            </section>
 
-              <section>
+            <section>
                 <h3>Build custom plots with Artists</h3>
                 <p>
                     <img width=400 data-src="img/original.png" />
@@ -382,7 +382,7 @@ _ = confetti(42)
 
             <section>
                 <pre><code class="python" data-trim data-noescape>
-fig, ax = plt.subplots(figsize=(10, 7))
+fig, ax = plt.subplots()
 lc = LineCollection(
     segments=[
         ((0, 1), (1, 1), (2, 1), (3, 1)), # flat line
@@ -434,7 +434,7 @@ lc = LineCollection(
             </section>
 
             <section>
-                <h2>Getting the LineCollection working</h2>
+                <h2>Working with LineCollection</h2>
                 <pre><code class="python" data-trim data-noescape>
 x = np.linspace(-2, 2)
 y = x ** 2
@@ -551,9 +551,9 @@ ax.axis('off')
 
             <section>
                 <h3>Matplotlib is an application and a library</h3>
-                <p>This is a source of ... <em>tension</em></p>
+                <p>This is a source of... <em>tension</em></p>
                 <p class='fragment'>A library wants to help you build tools</p>
-                <p class='fragment'>An Aplication wants to help you do something</p>
+                <p class='fragment'>An application wants to help you do something</p>
                 <p class='fragment'>A library should be explicit</p>
                 <p class='fragment'>An application should "do the right thing"...</p>
                 <p class='fragment'>...but "the right thing" is very subjective</p>
@@ -585,7 +585,7 @@ ax.axis('off')
                 <ul>
                     <li class='fragment'>Write wrappers around Axes methods</li>
                     <li class='fragment'>Write your own functions that instantiate Artists</li>
-                    <li class='fragment'>Write your own Arist classes that reimplement draw</li>
+                    <li class='fragment'>Write your own Artist classes that reimplement draw</li>
                 </ul>
 
                 <div class='fragment'>
@@ -606,23 +606,23 @@ ax.axis('off')
         // - https://github.com/hakimel/reveal.js#dependencies
         Reveal.initialize({
             dependencies: [{
-                src: 'plugin/markdown/marked.js'
-            },
-            {
-                src: 'plugin/markdown/markdown.js'
-            },
-            {
-                src: 'plugin/notes/notes.js',
-                async: true
-            },
-            {
-                src: 'plugin/highlight/highlight.js',
-                async: true
-            },
-            {
-                src: 'plugin/math/math.js',
-                async: true
-            },
+                    src: 'plugin/markdown/marked.js'
+                },
+                {
+                    src: 'plugin/markdown/markdown.js'
+                },
+                {
+                    src: 'plugin/notes/notes.js',
+                    async: true
+                },
+                {
+                    src: 'plugin/highlight/highlight.js',
+                    async: true
+                },
+                {
+                    src: 'plugin/math/math.js',
+                    async: true
+                },
             ],
             history: true,
             math: {
