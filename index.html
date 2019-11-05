@@ -62,7 +62,28 @@
                         <p>Many thanks to the Matplotlib team and contributors.</p>
 
             </section>
+            <section>
+                <h2>Your plotting should understand your domain</h2>
+                <ul class='fragment'>
+                    <li>ArviZ</li>
+                    <li class='fragment'>seaborn & plotnine</li>
+                    <div class='fragment'>
+                        <li>DataFrame.plot (pandas)</li>
+                        <li>DataArray.plot (xarray)</li>
+                    </div>
+                    <div class='fragment'>
+                        <li>basemap, cartopy, & geoplot</li>
+                        <li><a
+                                href="https://scikit-learn.org/dev/modules/generated/sklearn.inspection.plot_partial_dependence.html#sklearn.inspection.plot_partial_dependence">sklearn
+                                plot_partial_dependence</a></li>
+                        <li><a href="https://networkx.github.io/grave/latest/index.html">grave</a> & nxviz (networkx)</li>
+                    </div>
+                </ul>
 
+                <p><a class="fragment" href="https://matplotlib.org/thirdpartypackages/index.html">Third-party package
+                        listing</a></p>
+
+            </section>
             <section>
                 <h3>Style sheets</h3>
                 <pre><code class="python" data-trim data-noescape>
@@ -244,10 +265,11 @@ plt.plot(x, -np.cos(x), clip_on=False)
                 <pre><code class="python" data-trim data-noescape>
 print(plt.rcParams)
 </pre></code>
-                <p class="fragment">
-                    Convert output to RcParams format:
+<div class='fragment'>
+                <p>
+                    Convert output to RcParams format
                 </p>
-                <pre class='fragment'>
+                <pre>
     font.family: serif
     figure.facecolor: #fffff8
     axes.facecolor: #fffff8
@@ -255,9 +277,10 @@ print(plt.rcParams)
     hist.bins: auto
     lines.markersize: 8.0
 </pre>
-                <p class='fragment'>
+                <p>
                     Save to "<em>my_style</em>.mplstyle" </br>
                 </p>
+            </div>
             </section>
 
             <section>
@@ -285,7 +308,7 @@ plt.style.use("my_style")  # all set!
             <section>
                 <h3>Wrap Your Plots</h3>
                 <pre><code  class="python" data-trim data-noescape>
-def confetti(N, ax=None, **kwargs):
+def confetti(N, *, ax=None, **kwargs):
     if ax is None:
         ax = plt.gca()
     my_artists = ax.plot(*np.random.randn(N, 2),
@@ -293,7 +316,7 @@ def confetti(N, ax=None, **kwargs):
     return my_artists
 </code></pre>
                 <pre class="fragment"><code class="python" data-trim data-noescape>
-def solitare(x, ax=None, **kwargs):
+def solitare(x, *, ax=None, **kwargs):
     if ax is None:
         ax = plt.gca()
     kwargs.setdefault('clip_on', False)
@@ -332,20 +355,13 @@ _ = confetti(42)
     </code></pre>
                 <img height=300 data-src="img/combined_axis.png" />
             </section>
-
             <section>
-                <h3>Share Your Library </h3>
-                <p>Package like any standard Python package 🙃</p>
-                <p>We love to help:</p>
-                <a href=https://discourse.matplotlib.org/c/development/3rdparty>discourse.matplotlib.org/c/development/3rdparty
-                    </a> </section> <section>
                     <h3>Build custom plots with Artists</h3>
                     <p>
                         <img width=450 data-src="img/original_color.png" />
                         <img width=450 data-src="img/final.png" />
                     </p>
-            </section>
-
+            </section>  
             <section data-background-image="img/original_color.png">
             </section>
 
@@ -550,35 +566,21 @@ ax.axis('off')
                     <img height=400 data-src="img/lc8.png" />
                 </p>
             </section>
+            <section>
+                    <h3>Share Your Library </h3>
+                    <p>Package like any standard Python package 🙃</p>
+                    <p>We love to help:</p>
+                    <a href=https://discourse.matplotlib.org/c/development/3rdparty>discourse.matplotlib.org/c/development/3rdparty
+                        </a> </section>
 
             <section>
-                <h3>Matplotlib is an application and a library</h3>
-                <p>This is a source of... <em>tension</em></p>
+                <h3>Matplotlib is a Library & an Application</h3>
+                <p>This is a source of... <em class='fragment'>tension</em></p>
                 <p class='fragment'>A library wants to help you build tools</p>
                 <p class='fragment'>An application wants to help you do something</p>
                 <p class='fragment'>A library should be explicit</p>
                 <p class='fragment'>An application should "do the right thing"...</p>
                 <p class='fragment'>...but "the right thing" is very subjective</p>
-
-            </section>
-            <section>
-                <h2>Your plotting should understand your data</h2>
-                <ul class='fragment'>
-                    <li>seaborn & plotnine</li>
-                    <div class='fragment'>
-                        <li>DataFrame.plot (pandas)</li>
-                        <li>DataArray.plot (xarray)</li>
-                    </div>
-                    <div class='fragment'>
-                        <li><a
-                                href="https://scikit-learn.org/dev/modules/generated/sklearn.inspection.plot_partial_dependence.html#sklearn.inspection.plot_partial_dependence">sklearn
-                                plot_partial_dependence</a></li>
-                        <li><a href="https://networkx.github.io/grave/latest/index.html">grave</a> (networkx)</li>
-                    </div>
-                </ul>
-
-                <p><a class="fragment" href="https://matplotlib.org/thirdpartypackages/index.html">Third-party package
-                        listing</a></p>
 
             </section>
 
