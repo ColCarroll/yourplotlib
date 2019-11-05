@@ -470,6 +470,51 @@ ax.axis('off')
                 </p>
             </section>
 
+            <section>
+                <h3>Matplotlib is an application and a library</h3>
+                <p>This is a source of ... <em>tension</em></p>
+                <p class='fragment'>A library wants to help you build tools</p>
+                <p class='fragment'>An Aplication wants to help you do something</p>
+                <p class='fragment'>A library should be explicit</p>
+                <p class='fragment'>An application should "do the right thing"...</p>
+                <p class='fragment'>...but "the right thing" is very subjective</p>
+
+            </section>
+            <section>
+                <h2>Your plotting should understand your data</h2>
+                <ul class='fragment'>
+                    <li>seaborn & plotnine</li>
+                    <div class='fragment'>
+                        <li>DataFrame.plot (pandas)</li>
+                        <li>DataArray.plot (xarray)</li>
+                    </div>
+                    <div class='fragment'>
+                        <li><a
+                                href="https://scikit-learn.org/dev/modules/generated/sklearn.inspection.plot_partial_dependence.html#sklearn.inspection.plot_partial_dependence">sklearn
+                                plot_partial_dependence</a></li>
+                        <li><a href="https://networkx.github.io/grave/latest/index.html">grave</a> (networkx)</li>
+                    </div>
+                </ul>
+
+                <p><a class="fragment" href="https://matplotlib.org/thirdpartypackages/index.html">Third-party package
+                        listing</a></p>
+
+            </section>
+            <section>
+                <h2>Build the interface you need</h2>
+
+                <ul>
+                    <li class='fragment'>Write wrappers around Axes methods</li>
+                    <li class='fragment'>Write your own functions that instantiate Artists</li>
+                    <li class='fragment'>Write your own Arist classes that reimplement draw</li>
+                </ul>
+
+                <div class='fragment'>
+                    <p>Talk to us!</p>
+                    <a href="https://discourse.matplotlib.org/c/development/3rdparty">discourse.matplotlib.org</a>
+                </div>
+            </section>
+
 
         </div>
     </div>
@@ -482,23 +527,23 @@ ax.axis('off')
         // - https://github.com/hakimel/reveal.js#dependencies
         Reveal.initialize({
             dependencies: [{
-                    src: 'plugin/markdown/marked.js'
-                },
-                {
-                    src: 'plugin/markdown/markdown.js'
-                },
-                {
-                    src: 'plugin/notes/notes.js',
-                    async: true
-                },
-                {
-                    src: 'plugin/highlight/highlight.js',
-                    async: true
-                },
-                {
-                    src: 'plugin/math/math.js',
-                    async: true
-                },
+                src: 'plugin/markdown/marked.js'
+            },
+            {
+                src: 'plugin/markdown/markdown.js'
+            },
+            {
+                src: 'plugin/notes/notes.js',
+                async: true
+            },
+            {
+                src: 'plugin/highlight/highlight.js',
+                async: true
+            },
+            {
+                src: 'plugin/math/math.js',
+                async: true
+            },
             ],
             history: true,
             math: {
