@@ -76,7 +76,8 @@
                         <li><a
                                 href="https://scikit-learn.org/dev/modules/generated/sklearn.inspection.plot_partial_dependence.html#sklearn.inspection.plot_partial_dependence">sklearn
                                 plot_partial_dependence</a></li>
-                        <li><a href="https://networkx.github.io/grave/latest/index.html">grave</a> & nxviz (networkx)</li>
+                        <li><a href="https://networkx.github.io/grave/latest/index.html">grave</a> & nxviz (networkx)
+                        </li>
                     </div>
                 </ul>
 
@@ -265,11 +266,11 @@ plt.plot(x, -np.cos(x), clip_on=False)
                 <pre><code class="python" data-trim data-noescape>
 print(plt.rcParams)
 </pre></code>
-<div class='fragment'>
-                <p>
-                    Convert output to RcParams format
-                </p>
-                <pre>
+                <div class='fragment'>
+                    <p>
+                        Convert output to RcParams format
+                    </p>
+                    <pre>
     font.family: serif
     figure.facecolor: #fffff8
     axes.facecolor: #fffff8
@@ -277,10 +278,10 @@ print(plt.rcParams)
     hist.bins: auto
     lines.markersize: 8.0
 </pre>
-                <p>
-                    Save to "<em>my_style</em>.mplstyle" </br>
-                </p>
-            </div>
+                    <p>
+                        Save to "<em>my_style</em>.mplstyle" </br>
+                    </p>
+                </div>
             </section>
 
             <section>
@@ -356,12 +357,12 @@ _ = confetti(42)
                 <img height=300 data-src="img/combined_axis.png" />
             </section>
             <section>
-                    <h3>Build custom plots with Artists</h3>
-                    <p>
-                        <img width=450 data-src="img/original_color.png" />
-                        <img width=450 data-src="img/final.png" />
-                    </p>
-            </section>  
+                <h3>Build custom plots with Artists</h3>
+                <p>
+                    <img width=450 data-src="img/original_color.png" />
+                    <img width=450 data-src="img/final.png" />
+                </p>
+            </section>
             <section data-background-image="img/original_color.png">
             </section>
 
@@ -567,20 +568,18 @@ ax.axis('off')
                 </p>
             </section>
             <section>
-                    <h3>Share Your Library </h3>
-                    <p>Package like any standard Python package 🙃</p>
-                    <p>We love to help:</p>
-                    <a href=https://discourse.matplotlib.org/c/development/3rdparty>discourse.matplotlib.org/c/development/3rdparty
-                        </a> </section>
-
-            <section>
-                <h3>Matplotlib is a Library & an Application</h3>
-                <p>This is a source of... <em class='fragment'>tension</em></p>
-                <p class='fragment'>A library wants to help you build tools</p>
-                <p class='fragment'>An application wants to help you do something</p>
-                <p class='fragment'>A library should be explicit</p>
-                <p class='fragment'>An application should "do the right thing"...</p>
-                <p class='fragment'>...but "the right thing" is very subjective</p>
+                <h3>Share Your Library </h3>
+                <p>Package like any standard Python package 🙃</p>
+                <p>We love to help:</p>
+                <a href=https://discourse.matplotlib.org/c/development/3rdparty>discourse.matplotlib.org/c/development/3rdparty
+                    </a> </section> <section>
+                    <h3>Matplotlib is a Library & an Application</h3>
+                    <p>This is a source of... <em class='fragment'>tension</em></p>
+                    <p class='fragment'>A library wants to help you build tools</p>
+                    <p class='fragment'>An application wants to help you do something</p>
+                    <p class='fragment'>A library should be explicit</p>
+                    <p class='fragment'>An application should "do the right thing"...</p>
+                    <p class='fragment'>...but "the right thing" is very subjective</p>
 
             </section>
 
@@ -611,23 +610,23 @@ ax.axis('off')
         // - https://github.com/hakimel/reveal.js#dependencies
         Reveal.initialize({
             dependencies: [{
-                    src: 'plugin/markdown/marked.js'
-                },
-                {
-                    src: 'plugin/markdown/markdown.js'
-                },
-                {
-                    src: 'plugin/notes/notes.js',
-                    async: true
-                },
-                {
-                    src: 'plugin/highlight/highlight.js',
-                    async: true
-                },
-                {
-                    src: 'plugin/math/math.js',
-                    async: true
-                },
+                src: 'plugin/markdown/marked.js'
+            },
+            {
+                src: 'plugin/markdown/markdown.js'
+            },
+            {
+                src: 'plugin/notes/notes.js',
+                async: true
+            },
+            {
+                src: 'plugin/highlight/highlight.js',
+                async: true
+            },
+            {
+                src: 'plugin/math/math.js',
+                async: true
+            },
             ],
             history: true,
             math: {
