@@ -46,6 +46,12 @@
                     <p style="text-align: right" class="subtitle"><a
                             href="https://colindcarroll.com/">colindcarroll.com</a></p>
                 </div>
+                <div id="left">
+                    <p style="text-align: left" class="subtitle">@matplotlib</p>
+                    <p syle="text-align: left" class="subtitle"><a 
+                        href="https://discourse.matplotlib.org/">discourse.matplotlib.org</a>
+                    </p>
+                </div>
             </section>
 
             <section>
@@ -241,23 +247,96 @@ plt.plot(x, -np.cos(x), clip_on=False)
 
             <section>
                 <h3>Save your styles</h3>
-                <pre><code class="python" data-trim data-noescape>
-import matplotlib.pyplot as plt
-# Check out available keys
+                 Print Configuration:
+<pre><code class="python" data-trim data-noescape>
 print(plt.rcParams)
+</pre></code>
+<p class="fragment">               
+Convert output to RcParams format:
+</p>
+<pre class='fragment'>
+    "axes.prop_cycle": plt.cycler("color", ['#000000', '#1b6989', 
+    '#e69f00', '#009e73', '#f0e442', 
+    '#50b4e9', '#d55e00', '#cc79a7']),
+    ......
+    'font.family': 'serif',
+    'figure.facecolor': '#fffff8',
+    'axes.facecolor': '#fffff8',
+    'font.size': 14.0,
+    'hist.bins': 'auto',
+    ....
+    'lines.markersize': 8.0, 
+</pre>
+<p class='fragment'>
+Save to "<em>my_style</em>.mplstyle" </br>
+</p> 
+</section>
 
-# Find where to put your style file
+<section>
+Move your style to the right place
+<pre><code code class="python" data-trim data-noescape></codw>
 from pathlib import Path
 print(Path(matplotlib.get_configdir()) / "stylelib")
-# Create file "my_style.mplstyle"
-
-# Use the custom style
+</code></pre>
+</section>
+<section>
+Use your custom style:
+<pre><code  class="python" data-trim data-noescape>
 plt.style.use("my_style")  # all set!
 </code></pre>
                 <p>...You can also pip install styles if you are careful</p>
             </section>
 
-            <section>
+<section>
+<h3>Wrap Your Plots</h3>
+<pre><code  class="python" data-trim data-noescape>
+def confetti(N, ax=None, **kwargs):
+    if ax is None:
+        ax = plt.gca()
+    my_artists = ax.plot(*np.random.randn(N, 2), 
+                         clip_on=False, **kwargs)
+    return my_artists
+</code></pre>
+<pre class="fragment"><code class="python" data-trim data-noescape>
+def solitare(x, ax=None, **kwargs):
+    if ax is None:
+        ax = plt.gca()
+    kwargs.setdefault('clip_on', False)
+    my_artists = ax.plot(x, np.cos(x), x, np.sin(x),x, -np.cos(x),
+                         **kwargs)
+    return my_artists
+</code></pre>
+</section>
+
+<section>   
+<h3>Use Your New Plotting Methods </h3>
+<pre><code class="python" data-trim data-noescape>
+_ = confetti(42)
+</code></pre>
+<img height=300 data-src="img/sparks.png"/>
+</section>
+
+<section>   
+        <h3>Customize Your Plots</h3>
+        <pre><code class="python" data-trim data-noescape>
+        _ = confetti(20, marker='*', markersize=50)
+        _ = confetti(87, markersize=10)
+        </code></pre>
+        <img height=300 data-src="img/multisparkles.png"/>
+</section>
+
+<section>
+    <h3>Compose Your Plots</h3>
+    <pre><code class="python" data-trim data-noescape>
+    fig, (ax1,ax2) = plt.subplots(nrows=2)
+    _ = solitare(np.linspace(-np.pi, np.pi), ax=ax1, 
+                    markersize=30, marker='$\infty$')
+    _ = confetti(13, ax=ax2, marker='>')
+    </code></pre>
+    <img height=300 data-src="img/combined_axis.png"/>
+</section>
+
+              <section>
                 <h3>Build custom plots with Artists</h3>
                 <p>
                     <img width=400 data-src="img/original.png" />
