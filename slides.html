@@ -1,0 +1,649 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Building a maintainable plotting library</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/simple.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h3>(not part of the original set of slides)</h3>
+                <div>
+                    <p>These slides have been converted into a perhaps-more-readable essay:
+                    <p><a href="https://colcarroll.github.io/yourplotlib">colcarroll.github.io/yourplotlib</a>
+                    <p>Feel free to enjoy this version, though!</p>
+
+                </div>
+            </section>
+            <section>
+                <h3>Building a maintainable plotting library</h3>
+                <h1>
+                    <pre style="text-align: center;"><code>yourplotlib</code></pre>
+                </h1>
+
+                <div id="left">
+                    <!-- Can put a logo or something here-->
+                    <!-- <img data-src="img/logo-red-new.png" /> -->
+                </div>
+                <div id="right">
+                    <p style="text-align: right" class="subtitle">Colin Carroll</p>
+                    <p style="text-align: right" class="subtitle"><a
+                            href="https://colindcarroll.com/">colindcarroll.com</a></p>
+                </div>
+                <div id="left">
+                    <p style="text-align: left" class="subtitle">@matplotlib</p>
+                    <p syle="text-align: left" class="subtitle"><a
+                            href="https://discourse.matplotlib.org/">discourse.matplotlib.org</a>
+                    </p>
+                </div>
+                <p>
+                    <img height=100 data-src="img/logo2_compressed.svg" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Slides are online!</h3>
+                <p><a href="https://colcarroll.github.io/yourplotlib">colcarroll.github.io/yourplotlib</a>
+                    <p>Code is also available <a href="https://github.com/ColCarroll/yourplotlib">here.</a>
+                        <br>
+                        <p>Many thanks to the Matplotlib team and contributors.</p>
+
+            </section>
+            <section>
+                <h2>Your plotting should understand your domain</h2>
+                <ul class='fragment'>
+                    <li>ArviZ</li>
+                    <li class='fragment'>seaborn & plotnine</li>
+                    <div class='fragment'>
+                        <li>DataFrame.plot (pandas)</li>
+                        <li>DataArray.plot (xarray)</li>
+                    </div>
+                    <div class='fragment'>
+                        <li>basemap, cartopy, & geoplot</li>
+                        <li><a
+                                href="https://scikit-learn.org/dev/modules/generated/sklearn.inspection.plot_partial_dependence.html#sklearn.inspection.plot_partial_dependence">sklearn
+                                plot_partial_dependence</a></li>
+                        <li><a href="https://networkx.github.io/grave/latest/index.html">grave</a> & nxviz (networkx)
+                        </li>
+                    </div>
+                </ul>
+
+                <p><a class="fragment" href="https://matplotlib.org/thirdpartypackages/index.html">Third-party package
+                        listing</a></p>
+
+            </section>
+            <section>
+                <h3>Style sheets</h3>
+                <pre><code class="python" data-trim data-noescape>
+import matplotlib.pyplot as plt
+
+plt.style.use('default')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/default.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Style sheets</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.style.use('classic')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/classic.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Style sheets</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.style.use('ggplot')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/ggplot.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Style sheets</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.style.use('fivethirtyeight')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/fivethirtyeight.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Style sheets</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.style.use('tufte')
+</code></pre>
+                <p>
+                    <img height=450 data-src="img/tufte.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code class="python" data-trim data-noescape>
+import matplotlib.pyplot as plt
+
+plt.plot(*np.random.randn(50, 2))
+</code></pre>
+                <p>
+                    <img data-src="img/style1.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.rcParams.update({
+    "axes.prop_cycle": plt.cycler(
+        "color",
+        ["#EE9041", "#459DB9", "#667B83"]),
+})
+plt.plot(*np.random.randn(50, 2))
+</code></pre>
+                <p>
+                    <img data-src="img/style2.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.rcParams.update({
+    "figure.figsize": [10.0, 3.0],
+})
+plt.plot(*np.random.randn(50, 2))
+</code></pre>
+                <p>
+                    <img data-src="img/style3.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.rcParams.update({
+    "lines.marker": "d",
+})
+plt.plot(*np.random.randn(50, 2))
+</code></pre>
+                <p>
+                    <img data-src="img/style4.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.rcParams.update({
+    "lines.linestyle": "",
+})
+plt.plot(*np.random.randn(50, 2))
+</code></pre>
+                <p>
+                    <img data-src="img/style5.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.rcParams.update({
+    "lines.markersize": 48.0,
+})
+plt.plot(*np.random.randn(50, 2), clip_on=False)
+</code></pre>
+                <p>
+                    <img data-src="img/style6.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.rcParams.update({
+    "axes.spines.bottom": False,
+    "axes.spines.top": False,
+    "axes.spines.left": False,
+    "axes.spines.right": False,
+    "xtick.major.bottom": False,
+    "ytick.major.left": False,
+})
+plt.plot(*np.random.randn(50, 2), clip_on=False)
+</code></pre>
+                <p>
+                    <img data-src="img/style7.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code class="python" data-trim data-noescape>
+plt.rcParams.update({
+    "lines.markeredgecolor": "black",
+})
+plt.plot(*np.random.randn(50, 2), clip_on=False)
+</code></pre>
+                <p>
+                    <img data-src="img/style8.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Set a stylish default</h3>
+                <pre><code class="python" data-trim data-noescape>
+x = np.linspace(-4, 4)
+plt.plot(x, np.cos(x), clip_on=False)
+plt.plot(x, np.sin(x), clip_on=False)
+plt.plot(x, -np.cos(x), clip_on=False)
+</code></pre>
+                <p>
+                    <img data-src="img/style9.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Save your styles</h3>
+                Print Configuration:
+                <pre><code class="python" data-trim data-noescape>
+print(plt.rcParams)
+</pre></code>
+                <div class='fragment'>
+                    <p>
+                        Convert output to RcParams format
+                    </p>
+                    <pre>
+    font.family: serif
+    figure.facecolor: #fffff8
+    axes.facecolor: #fffff8
+    font.size: 14.0
+    hist.bins: auto
+    lines.markersize: 8.0
+</pre>
+                    <p>
+                        Save to "<em>my_style</em>.mplstyle" </br>
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                Move your style to the right place
+                <pre><code code class="python" data-trim data-noescape></codw>
+from pathlib import Path
+print(Path(matplotlib.get_configdir()) / "stylelib")
+</code></pre>
+            </section>
+            <section>
+                Use your custom style:
+                <pre><code  class="python" data-trim data-noescape>
+plt.style.use("my_style")  # all set!
+</code></pre>
+                <p>...You can also pip install styles if you are careful</p>
+            </section>
+
+            <section>
+                <h3>Be bold.</h3>
+                <p>
+                    <img data-src="img/bins.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Wrap Your Plots</h3>
+                <pre><code  class="python" data-trim data-noescape>
+def confetti(N, *, ax=None, **kwargs):
+    if ax is None:
+        ax = plt.gca()
+    my_artists = ax.plot(*np.random.randn(N, 2),
+                         clip_on=False, **kwargs)
+    return my_artists
+</code></pre>
+                <pre class="fragment"><code class="python" data-trim data-noescape>
+def solitare(x, *, ax=None, **kwargs):
+    if ax is None:
+        ax = plt.gca()
+    kwargs.setdefault('clip_on', False)
+    my_artists = ax.plot(x, np.cos(x),
+                         x, np.sin(x),
+                         x, -np.cos(x),
+                         **kwargs)
+    return my_artists
+</code></pre>
+            </section>
+
+            <section>
+                <h3>Use Your New Plotting Methods </h3>
+                <pre><code class="python" data-trim data-noescape>
+_ = confetti(42)
+</code></pre>
+                <img height=300 data-src="img/sparks.png" />
+            </section>
+
+            <section>
+                <h3>Customize Your Plots</h3>
+                <pre><code class="python" data-trim data-noescape>
+        _ = confetti(20, marker='*', markersize=50)
+        _ = confetti(87, markersize=10)
+        </code></pre>
+                <img height=300 data-src="img/multisparkles.png" />
+            </section>
+
+            <section>
+                <h3>Compose Your Plots</h3>
+                <pre><code class="python" data-trim data-noescape>
+    fig, (ax1,ax2) = plt.subplots(nrows=2)
+    _ = solitare(np.linspace(-np.pi, np.pi), ax=ax1,
+                    markersize=30, marker='$\infty$')
+    _ = confetti(13, ax=ax2, marker='>')
+    </code></pre>
+                <img height=300 data-src="img/combined_axis.png" />
+            </section>
+            <section>
+                <h3>Build custom plots with Artists</h3>
+                <p>
+                    <img width=450 data-src="img/original_color.png" />
+                    <img width=450 data-src="img/final.png" />
+                </p>
+            </section>
+            <section data-background-image="img/original_color.png">
+            </section>
+
+            <section data-background-image="img/original.png">
+            </section>
+
+            <section data-background-image="img/mask.png">
+            </section>
+
+            <section data-background-image="img/pete_mask.png">
+            </section>
+
+            <section data-background-image="img/smooth_mask.png">
+            </section>
+
+            <section data-background-image="img/pete_smooth.png">
+            </section>
+
+            <section data-background-image="img/pete_thresh.png">
+            </section>
+
+            <section data-background-image="img/pete_zones.png">
+            </section>
+
+            <section data-background-image="img/pete_final_no_smooth.png">
+            </section>
+
+            <section data-background-image="img/pete_final_wide.png">
+            </section>
+
+            <section data-background-image="img/final.png">
+            </section>
+
+            <section data-background-image="img/final_color.png">
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+fig, ax = plt.subplots()
+lc = LineCollection(
+    segments=[
+        ((0, 1), (1, 1), (2, 1), (3, 1)), # flat line
+        ((0, 1), (1, 2), (2, 3), (3, 4)), # straight line
+        ((0, 0), (1, 2), (2, 4), (3, 9)), # parabola
+    ],
+)
+ax.add_collection(lc)
+ax.set_ylim(0, 9)
+ax.set_xlim(0, 3)
+</code></pre>
+                <p>
+                    <img height=350 data-src="img/lc1.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+...
+lc = LineCollection(
+    segments=...,
+    colors=('red', 'green', 'blue'),
+    linewidths=(4, 8, 12),
+    linestyles=('dashed', 'dotted', 'solid')
+
+)
+...
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc2.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+...
+lc = LineCollection(
+    segments=[
+        ((0, 0), (1, 2)),
+        ((1, 2), (2, 4)),
+        ((2, 4), (3, 9))
+    ], ...
+)
+...
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc3.png" />
+                </p>
+            </section>
+
+            <section>
+                <h2>Working with LineCollection</h2>
+                <pre><code class="python" data-trim data-noescape>
+x = np.linspace(-2, 2)
+y = x ** 2
+
+points = np.vstack((x, y)).T
+# array([[-2.        ,  4.        ],
+#       [-1.91836735,  3.68013328],
+#       [-1.83673469,  3.37359434],
+#       [-1.75510204,  3.08038317],...
+segments = list(zip(points[:-1], points[1:]))
+</code></pre>
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+fig, ax = plt.subplots()
+
+lc = LineCollection(segments=segments)
+
+ax.add_collection(lc)
+ax.set_ylim(-0.2, 4)
+ax.set_xlim(-2, 2)
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc4.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+linewidths = 30 * np.abs(np.sin(10 * x))
+...
+
+lc = LineCollection(
+    segments=segments,
+    linewidths=linewidths
+)
+...
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc5.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+cmap = plt.get_cmap('viridis')
+...
+
+lc = LineCollection(
+    segments=segments,
+    linewidths=linewidths,
+    colors=cmap(np.abs(np.sin(5 * x))),
+)
+...
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc6.png" />
+                </p>
+            </section>
+
+            <section>
+                <h3>Light wrappers for your use</h3>
+                <pre><code class="python" data-trim data-noescape>
+def plot_line(x, y, linewidths=None, colors=None, ax=None):
+    points = np.vstack((x, y)).T
+    segments = list(zip(points[:-1], points[1:]))
+    if ax is None:
+        ax = plt.gca()
+
+    lc = LineCollection(
+        segments=segments,
+        linewidths=linewidths,
+        colors=colors,
+    )
+    ax.add_collection(lc)
+    #  ...mess with scales...
+    return lc
+</code></pre>
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+x = np.linspace(-2, 2)
+y = x ** 2
+linewidths = 30 * np.abs(np.sin(10 * x))
+colors = plt.get_cmap('viridis')(np.abs(np.sin(5 * x)))
+
+# Our custom function!
+plot_line(x, y,
+          linewidths=linewidths,
+          colors=colors)
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc7.png" />
+                </p>
+            </section>
+
+            <section>
+                <pre><code class="python" data-trim data-noescape>
+t = np.linspace(0, np.pi * 2.0, 2_000)
+cmap = plt.get_cmap('rainbow')
+colors = cmap(np.abs(np.cos(t * 1.25)))
+
+plot_line(np.cos(t), np.sin(t), # circle
+          linewidths=40 * np.cos(1.5 * t), # 3 turns
+          colors=colors)
+ax.axis('off')
+</code></pre>
+                <p>
+                    <img height=400 data-src="img/lc8.png" />
+                </p>
+            </section>
+            <section>
+                <h3>Share Your Library </h3>
+                <p>Package like any standard Python package 🙃</p>
+                <p>We love to help:</p>
+                <a href=https://discourse.matplotlib.org/c/development/3rdparty>discourse.matplotlib.org/c/development/3rdparty
+                    </a> </section> <section>
+                    <h3>Matplotlib is a Library & an Application</h3>
+                    <p>This is a source of... <em class='fragment'>tension</em></p>
+                    <p class='fragment'>A library wants to help you build tools</p>
+                    <p class='fragment'>An application wants to help you do something</p>
+                    <p class='fragment'>A library should be explicit</p>
+                    <p class='fragment'>An application should "do the right thing"...</p>
+                    <p class='fragment'>...but "the right thing" is very subjective</p>
+
+            </section>
+
+            <section>
+                <h2>Build the interface you need</h2>
+
+                <ul>
+                    <li class='fragment'>Write wrappers around Axes methods</li>
+                    <li class='fragment'>Write your own functions that instantiate Artists</li>
+                    <li class='fragment'>Write your own Artist classes that reimplement draw</li>
+                </ul>
+
+                <div class='fragment'>
+                    <p>Talk to us!</p>
+                    <a href="https://discourse.matplotlib.org/c/development/3rdparty">discourse.matplotlib.org</a>
+                </div>
+            </section>
+
+
+        </div>
+    </div>
+
+    <script src="js/reveal.js"></script>
+
+    <script>
+        // More info about config & dependencies:
+        // - https://github.com/hakimel/reveal.js#configuration
+        // - https://github.com/hakimel/reveal.js#dependencies
+        Reveal.initialize({
+            dependencies: [{
+                src: 'plugin/markdown/marked.js'
+            },
+            {
+                src: 'plugin/markdown/markdown.js'
+            },
+            {
+                src: 'plugin/notes/notes.js',
+                async: true
+            },
+            {
+                src: 'plugin/highlight/highlight.js',
+                async: true
+            },
+            {
+                src: 'plugin/math/math.js',
+                async: true
+            },
+            ],
+            history: true,
+            math: {
+                mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+                config: 'TeX-AMS_HTML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+            },
+        });
+    </script>
+</body>
+
+</html>

@@ -1,225 +1,278 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-    <title>Building a maintainable plotting library</title>
-
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/reveal.css">
-    <link rel="stylesheet" href="css/theme/simple.css">
-    <link rel="stylesheet" href="css/custom.css">
-
-    <!-- Theme used for syntax highlighting of code -->
-    <link rel="stylesheet" href="lib/css/monokai.css">
-
-    <!-- Printing and PDF exports -->
-    <script>
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
-        document.getElementsByTagName('head')[0].appendChild(link);
+    <meta charset="utf-8" />
+    <title>yourplotlib</title>
+    <link rel="stylesheet" href="css/tufte.css" />
+    <link rel="stylesheet" href="css/latex.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async>
     </script>
+
+    <style>
+        code {
+            background-color: #EEEEEE;
+            font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New;
+        }
+
+        .biglogo {
+            border: none;
+            width: auto;
+            height: 14em;
+            margin-top: 3em;
+        }
+
+        .logo {
+            border: none;
+            width: auto;
+            height: 5em;
+            margin-top: 3em;
+        }
+
+        .title {
+            display: inline-block;
+            text-align: right;
+        }
+
+        video {
+            max-width: 100%;
+            height: auto;
+        }
+
+        pre {
+            border: 1px solid #196786;
+            padding: 10px;
+            background-color: aliceblue;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="reveal">
-        <div class="slides">
-            <section>
-                <h3>Building a maintainable plotting library</h3>
-                <h1>
-                    <pre style="text-align: center;"><code>yourplotlib</code></pre>
-                </h1>
+    <article>
+        <div class=title style="display: inline-block">
+            <img src="img/logo_small.png" class=biglogo style="float: right"></img>
+            <div style="float: left;">
+                <h1><code>yourplotlib</code></h1>
+                <h2 class="subtitle">Best practices for domain-specific matplotlib libraries</h2>
+                <p class="subtitle"><a href="https://colindcarroll.com">Colin Carroll</a>, Hannah Aizenman, and Thomas
+                    Caswell</p>
+            </div>
+        </div>
+        <section>
+            <h2>Introduction: Plotting should understand your domain</h2>
+            <p><span class=marginnote>This essay is based on a talk given on November 5, 2019 at <a
+                        href="https://pydata.org/nyc2019/">PyData New York</a>. Original slides are available <a
+                        href="slides.html">here</a>. All <a href="https://github.com/ColCarroll/yourplotlib">the code
+                        for
+                        producing the plots</a> is available on in this repo. It is (of course) produced with
+                    <a href="https://matplotlib.org/">matplotlib</a>, with gracious assists
+                    from <a href="https://numpy.org/">NumPy</a>, <a href="https://scipy.org/">SciPy</a>,
+                    and <a href="https://jupyter.org/">Project Jupyter</a>.
+                </span>
+            </p>
 
-                <div id="left">
-                    <!-- Can put a logo or something here-->
-                    <!-- <img data-src="img/logo-red-new.png" /> -->
-                </div>
-                <div id="right">
-                    <p style="text-align: right" class="subtitle">Colin Carroll</p>
-                    <p style="text-align: right" class="subtitle"><a
-                            href="https://colindcarroll.com/">colindcarroll.com</a></p>
-                </div>
-                <div id="left">
-                    <p style="text-align: left" class="subtitle">@matplotlib</p>
-                    <p syle="text-align: left" class="subtitle"><a
-                            href="https://discourse.matplotlib.org/">discourse.matplotlib.org</a>
-                    </p>
-                </div>
-                <p>
-                    <img height=100 data-src="img/logo2_compressed.svg" />
-                </p>
-            </section>
+            <p>There is a tension in matplotlib between being a <em>library</em> and an <em>application</em>. A library
+                seeks to provide stable and useful APIs for application builders, while an application tries to "do the
+                right thing". You can think of this essay as some steps towards using matplotlib productively as a
+                library to build applications for your own domain or data.
+            </p>
+            <p>
+                There are numerous popular libraries that already follow this advice:
+            </p>
+            <ul>
+                <li><a href="https://arviz-devs.github.io/arviz/">ArviZ</a> for plotting Bayesian data<label for="arviz"
+                        class="margin-toggle sidenote-number"></label><input type="checkbox" id="arviz"
+                        class="margin-toggle" /> <span class=sidenote>Colin is one of the creators of ArviZ, while
+                        Hannah and Thomas are maintainers of matplotlib. Two years of interaction between a
+                        domain-specific author and general purpose maintainers is what inspired this talk/essay.
+                    </span>
+                </li>
+                <li><a href="https://seaborn.pydata.org/">Seaborn</a> for statistical data visualization</li>
+                <li><a href="https://plotnine.readthedocs.io/en/stable/">plotnine</a>, an implementation of a
+                    grammar of graphics<label for="ggplot" class="margin-toggle sidenote-number"></label><input
+                        type="checkbox" id="ggplot" class="margin-toggle" /> <span class=sidenote>The R library <a
+                            href="https://ggplot2.tidyverse.org/">ggplot2</a> helped popularize <a
+                            href="https://www.springer.com/gp/book/9780387245447">the grammar of graphics</a> in
+                        the data science world. The codebase for plotnine is also remarkably clean and worth a read
+                        if you are trying to do anything tricky and custom with <code>Artist</code>s.</span>
+                </li>
+                <li><code>DataFrame.plot</code>(<a href="https://pandas.pydata.org/">pandas</a>) and
+                    <code>DataArray.plot</code>(<a href="http://xarray.pydata.org/en/stable/">xarray</a>) for
+                    labelled arrays
+                </li>
+                <li><a href="https://matplotlib.org/basemap/">basemap</a><label for="basemap"
+                        class="margin-toggle sidenote-number"></label><input type="checkbox" id="basemap"
+                        class="margin-toggle" /> <span class=sidenote>Deprecated in favor of cartopy</span>, <a
+                        href="https://scitools.org.uk/cartopy/docs/latest/">cartopy</a>, and <a
+                        href="https://residentmario.github.io/geoplot/index.html">geoplot</a> for geospatial data
+                </li>
+                <li><a href="https://scikit-learn.org/dev/visualizations.html">scikit-learn</a> has a new plotting
+                    API that works closely with domain-specific objects
+                </li>
+                <li><a href="https://networkx.github.io/grave/latest/index.html">grave</a> and <a
+                        href="https://nxviz.readthedocs.io/en/latest/">nxviz</a> for network data
+                </li>
+            </ul>
+            <p>
+                A more complete and up-to-date listing of 3rd party packages is <a
+                    href="https://matplotlib.org/thirdpartypackages/index.html">on the matplotlib website</a><label
+                    for="thirdparty" class="margin-toggle sidenote-number"></label><input type="checkbox"
+                    id="thirdparty" class="margin-toggle" /> <span class=sidenote>Pull requests welcome and
+                    encouraged!</span>.
+            </p>
+        </section>
+        <section>
+            <h2>1. Stylesheets</h2>
+            <p> Whether you are in a lab setting, a data science team, open source project, or individual writing
+                blog posts, perhaps the easiest thing to do is to make a custom stylesheet. This takes less than an hour
+                and can be reused forever. Think of it as marketing for your visualizations: a consistent and
+                distinctive style can help you stand out and be memorable.
+            </p>
+            <p>
+                Many styles already ship with matplotlib, and you can try using one out right now. The default
+                stylesheet matplotlib uses has 10 colors it cycles through that were carefully picked, and will be
+                applied if you do nothing.
 
-            <section>
-                <h3>Slides are online!</h3>
-                <p><a href="https://colcarroll.github.io/yourplotlib">colcarroll.github.io/yourplotlib</a>
-                    <p>Code is also available <a href="https://github.com/ColCarroll/yourplotlib">here.</a>
-                        <br>
-                        <p>Many thanks to the Matplotlib team and contributors.</p>
-
-            </section>
-            <section>
-                <h2>Your plotting should understand your domain</h2>
-                <ul class='fragment'>
-                    <li>ArviZ</li>
-                    <li class='fragment'>seaborn & plotnine</li>
-                    <div class='fragment'>
-                        <li>DataFrame.plot (pandas)</li>
-                        <li>DataArray.plot (xarray)</li>
-                    </div>
-                    <div class='fragment'>
-                        <li>basemap, cartopy, & geoplot</li>
-                        <li><a
-                                href="https://scikit-learn.org/dev/modules/generated/sklearn.inspection.plot_partial_dependence.html#sklearn.inspection.plot_partial_dependence">sklearn
-                                plot_partial_dependence</a></li>
-                        <li><a href="https://networkx.github.io/grave/latest/index.html">grave</a> & nxviz (networkx)
-                        </li>
-                    </div>
-                </ul>
-
-                <p><a class="fragment" href="https://matplotlib.org/thirdpartypackages/index.html">Third-party package
-                        listing</a></p>
-
-            </section>
-            <section>
-                <h3>Style sheets</h3>
-                <pre><code class="python" data-trim data-noescape>
-import matplotlib.pyplot as plt
+            </p>
+            <p>
+                <pre class=code>import matplotlib.pyplot as plt
 
 plt.style.use('default')
-</code></pre>
-                <p>
-                    <img height=450 data-src="img/default.png" />
-                </p>
-            </section>
+</pre>
+                <figure>
+                    <img src="img/default.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Style sheets</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.style.use('classic')
-</code></pre>
-                <p>
-                    <img height=450 data-src="img/classic.png" />
-                </p>
-            </section>
+            <p> You can restore an older, "classic" matplotlib style that uses 7 colors, outlined markers, and larger
+                figures:
+                <pre class=code>plt.style.use('classic')</pre>
+                <figure>
+                    <img src="img/classic.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Style sheets</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.style.use('ggplot')
-</code></pre>
-                <p>
-                    <img height=450 data-src="img/ggplot.png" />
-                </p>
-            </section>
+            <p>The <code>ggplot2</code> theme has become quite recognizeable, and ships with matplotlib. Notice the
+                light gray background and subtle white axes<label for="hadley"
+                    class="margin-toggle sidenote-number"></label><input type="checkbox" id="hadley"
+                    class="margin-toggle" /> <span class=sidenote>One of the first statistics (and programming, and
+                    visualization) lectures Colin ever attended was as a graduate student at Rice University, and was
+                    given by <a href="http://hadley.nz/">Prof. Hadley Wickham</a> on his new library ggplot2. He
+                    <i>also</i> gave the specific advice to customize your theme to be anything but the default, and
+                    indeed the ggplot2 default theme was quite striking!</span>.
+                <pre class=code>plt.style.use('ggplot')</pre>
+                <figure>
+                    <img src="img/ggplot.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Style sheets</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.style.use('fivethirtyeight')
-</code></pre>
-                <p>
-                    <img height=450 data-src="img/fivethirtyeight.png" />
-                </p>
-            </section>
+            <p>The style that the writers and dava visualization team at <a
+                    href="https://fivethirtyeight.com/">FiveThirtyEight</a> use is also quite distinctive. Notice the
+                bold colors and thick lines, which are ideal for display graphics, if harder to use for exploratory
+                visualizations.
+                <pre class=code>plt.style.use('fivethirtyeight')</pre>
+                <figure>
+                    <img src="img/fivethirtyeight.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Style sheets</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.style.use('tufte')
-</code></pre>
-                <p>
-                    <img height=450 data-src="img/tufte.png" />
-                </p>
-            </section>
-
-            <section>
-                <h3>Set a stylish default</h3>
-                <pre><code class="python" data-trim data-noescape>
-import matplotlib.pyplot as plt
-
-plt.plot(*np.random.randn(50, 2))
-</code></pre>
-                <p>
-                    <img data-src="img/style1.png" />
-                </p>
-            </section>
-
-            <section>
-                <h3>Set a stylish default</h3>
-                <pre><code class="python" data-trim data-noescape>
+            <p>Colin uses a custom stylesheet<label for="tufte" class="margin-toggle sidenote-number"></label><input
+                    type="checkbox" id="tufte" class="margin-toggle" /> <span class=sidenote>So the following code will
+                    only work if you first install <a
+                        href="https://gist.github.com/ColCarroll/bb509ba8016fbbfe485ba6b89912452b">his
+                        stylesheet.</a></span> heavily inspired by <a href="https://www.edwardtufte.com/tufte/">Edward
+                    Tufte</a><label for="tufte2" class="margin-toggle sidenote-number"></label><input type="checkbox"
+                    id="tufte2" class="margin-toggle" /> <span class=sidenote>In fact, translating <a
+                        href="https://edwardtufte.github.io/tufte-css/">the CSS that this essay also uses</a> into
+                    matplotlib styles.</span>, as well as by the <a
+                    href="https://altair-viz.github.io/">Altair</a><label for="altair"
+                    class="margin-toggle sidenote-number"></label><input type="checkbox" id="altair"
+                    class="margin-toggle" /> <span class=sidenote>Another implementation of the grammar of graphics,
+                    based on <a href="http://vega.github.io/vega">Vega</a> and <a
+                        href="http://vega.github.io/vega-lite">Vega-Lite</a>.</span>
+                library, which also uses the hollow circles as a default marker.
+                <pre class=code>plt.style.use('tufte')</pre>
+                <figure>
+                    <img src="img/tufte.png" />
+                </figure>
+            </p>
+            <h3>Experimenting with stylesheets</h3>
+            <p>We can look at one way of interactively building a custom styling. We do this by updating the
+                <code>rcParams</code> object, which behaves like a dictionary. First, we make some standard plot that
+                looks generally like the sorts of plots we want to deal with.
+                <pre class=code>plt.plot(*np.random.randn(50, 2))</pre>
+                <figure>
+                    <img src="img/style1.png" />
+                </figure>
+            </p>
+            <p>First, we adjust the default size for the figure. This is designed for talks and essays, so a wide,
+                not-very-tall figure is appropriate.
+                <pre class=code>plt.rcParams.update({
 plt.rcParams.update({
+    "figure.figsize": [10.0, 3.0],
+})
+plt.plot(*np.random.randn(50, 2))</pre>
+                <figure>
+                    <img src="img/style2.png" />
+                </figure>
+            </p>
+
+            <p>Now we can update colors. This talk was delivered at PyData New York<span class=marginnote><img
+                        src="img/pydata-logo-final.png" /></span>, and we can imagine we are building a domain-specific
+                library for making plots for PyData conferences. The easiest thing we can do is take these distinctive
+                colors from the PyData logo as our default colors:
+                <pre class=code>plt.rcParams.update({
     "axes.prop_cycle": plt.cycler(
         "color",
         ["#EE9041", "#459DB9", "#667B83"]),
 })
-plt.plot(*np.random.randn(50, 2))
-</code></pre>
-                <p>
-                    <img data-src="img/style2.png" />
-                </p>
-            </section>
+plt.plot(*np.random.randn(50, 2))</pre>
+                <figure>
+                    <img src="img/style3.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Set a stylish default</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.rcParams.update({
-    "figure.figsize": [10.0, 3.0],
-})
-plt.plot(*np.random.randn(50, 2))
-</code></pre>
-                <p>
-                    <img data-src="img/style3.png" />
-                </p>
-            </section>
-
-            <section>
-                <h3>Set a stylish default</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.rcParams.update({
+            <p>Next, we update the default marker from <code>None</code> to a diamond, again borrowing from the
+                PyData motif:
+                <pre class=code>plt.rcParams.update({
     "lines.marker": "d",
 })
-plt.plot(*np.random.randn(50, 2))
-</code></pre>
-                <p>
-                    <img data-src="img/style4.png" />
-                </p>
-            </section>
+plt.plot(*np.random.randn(50, 2))</pre>
+                <figure>
+                    <img src="img/style4.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Set a stylish default</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.rcParams.update({
+            <p>We can remove the lines, so that by default we get a scatterplot instead of a line plot
+                <pre class=code>plt.rcParams.update({
     "lines.linestyle": "",
 })
-plt.plot(*np.random.randn(50, 2))
-</code></pre>
-                <p>
-                    <img data-src="img/style5.png" />
-                </p>
-            </section>
+plt.plot(*np.random.randn(50, 2))</pre>
+                <figure>
+                    <img src="img/style5.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Set a stylish default</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.rcParams.update({
+            <p>Then making the markers bigger, so we can actually see them<label for="clipon"
+                    class="margin-toggle sidenote-number"></label><input type="checkbox" id="clipon"
+                    class="margin-toggle" /> <span class=sidenote>Note we are cheating and adding
+                    <code>clip_on=False</code> here, which lets our markers get drawn outside the axis limits.</span>.
+                <pre class=code>plt.rcParams.update({
     "lines.markersize": 48.0,
 })
-plt.plot(*np.random.randn(50, 2), clip_on=False)
-</code></pre>
-                <p>
-                    <img data-src="img/style6.png" />
-                </p>
-            </section>
+plt.plot(*np.random.randn(50, 2), clip_on=False)</pre>
+                <figure>
+                    <img src="img/style6.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Set a stylish default</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.rcParams.update({
+
+            <p>Removing the bounding box (called <code>spines</code>), as well as the axis ticks on
+                the bottom and the left gives this a more artistic look. Note while we are doing this that we could
+                instead
+                leave some subset of the spines visible, or move the axis ticks to the top or right of a plot.
+                <pre class=code>plt.rcParams.update({
     "axes.spines.bottom": False,
     "axes.spines.top": False,
     "axes.spines.left": False,
@@ -227,97 +280,103 @@ plt.rcParams.update({
     "xtick.major.bottom": False,
     "ytick.major.left": False,
 })
-plt.plot(*np.random.randn(50, 2), clip_on=False)
-</code></pre>
-                <p>
-                    <img data-src="img/style7.png" />
-                </p>
-            </section>
+plt.plot(*np.random.randn(50, 2), clip_on=False)</pre>
+                <figure>
+                    <img src="img/style7.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Set a stylish default</h3>
-                <pre><code class="python" data-trim data-noescape>
-plt.rcParams.update({
+
+            <p>Finally, for some artistic flair and pop, we add a thin outline to the markers:
+                <pre class=code>plt.rcParams.update({
     "lines.markeredgecolor": "black",
 })
-plt.plot(*np.random.randn(50, 2), clip_on=False)
-</code></pre>
-                <p>
-                    <img data-src="img/style8.png" />
-                </p>
-            </section>
+plt.plot(*np.random.randn(50, 2), clip_on=False)</pre>
+                <figure>
+                    <img src="img/style8.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Set a stylish default</h3>
-                <pre><code class="python" data-trim data-noescape>
-x = np.linspace(-4, 4)
+            <p>This is now a stylish default! Note that it helps us create a <em>certain kind of plot</em> with minimal
+                code. Whether or not this is the kind of plot you want is up to you. Remember: <em>your plotting should
+                    understand your domain</em>.
+                <pre class=code>x = np.linspace(-4, 4)
 plt.plot(x, np.cos(x), clip_on=False)
 plt.plot(x, np.sin(x), clip_on=False)
-plt.plot(x, -np.cos(x), clip_on=False)
-</code></pre>
-                <p>
-                    <img data-src="img/style9.png" />
-                </p>
-            </section>
+plt.plot(x, -np.cos(x), clip_on=False) </pre>
+                <figure>
+                    <img src="img/style9.png" />
+                </figure>
+            </p>
 
-            <section>
-                <h3>Save your styles</h3>
-                Print Configuration:
-                <pre><code class="python" data-trim data-noescape>
-print(plt.rcParams)
-</pre></code>
-                <div class='fragment'>
-                    <p>
-                        Convert output to RcParams format
-                    </p>
-                    <pre>
-    font.family: serif
-    figure.facecolor: #fffff8
-    axes.facecolor: #fffff8
-    font.size: 14.0
-    hist.bins: auto
-    lines.markersize: 8.0
-</pre>
-                    <p>
-                        Save to "<em>my_style</em>.mplstyle" </br>
-                    </p>
-                </div>
-            </section>
+            <h3>Saving your style</h3>
+            <p>Once you have a style you like, you can save your updated <code>rcParams</code> to a stylesheet. A few
+                parameterss need special care to encode in the format, but it is reasonably easy to pattern match. See
+                the <a
+                    href="https://github.com/matplotlib/matplotlib/blob/master/lib/matplotlib/mpl-data/stylelib/fivethirtyeight.mplstyle">FiveThirtyEight
+                    stylesheet</a> or <a
+                    href="https://gist.github.com/ColCarroll/bb509ba8016fbbfe485ba6b89912452b">Colin's custom
+                    stylesheet</a> for examples of the format.
+            </p>
+            <p>To find where to save this stylesheet, you use the "stylelib" directory in your matplotlib configuration
+                directory. You can find the location of this by running
+            </p>
 
-            <section>
-                Move your style to the right place
-                <pre><code code class="python" data-trim data-noescape></codw>
-from pathlib import Path
-print(Path(matplotlib.get_configdir()) / "stylelib")
-</code></pre>
-            </section>
-            <section>
-                Use your custom style:
-                <pre><code  class="python" data-trim data-noescape>
-plt.style.use("my_style")  # all set!
-</code></pre>
-                <p>...You can also pip install styles if you are careful</p>
-            </section>
+            <pre class=code>from pathlib import Path
 
-            <section>
-                <h3>Be bold.</h3>
-                <p>
-                    <img data-src="img/bins.png" />
-                </p>
-            </section>
+print(Path(matplotlib.get_configdir()) / "stylelib")</pre>
+            <p>
+                On my computer, I have a file at <code>~/.config/matplotlib/stylelib/tufte.mplstyle</code>, which
+                lets me run
+            </p>
+            <pre class=code>plt.style.use("tufte")</pre>
+            <p>
+                and be all set.
+            </p>
 
-            <section>
-                <h3>Wrap Your Plots</h3>
-                <pre><code  class="python" data-trim data-noescape>
-def confetti(N, *, ax=None, **kwargs):
+            <p>There are also ways to <code>pip</code> install styles, so you can distribute custom stylesheets using
+                Python packaging. One way is to follow <a
+                    href="https://github.com/arviz-devs/arviz/blob/master/arviz/__init__.py">ArviZ's approach</a>, and
+                add your stylesheet directory to matplotlib's search path on import:</p>
+            <pre class=code># __init__.py
+from matplotlib.pyplot import style
+
+# add ArviZ's styles to matplotlib's styles
+arviz_style_path = os.path.join(os.path.dirname(__file__), "plots", "styles")
+style.core.USER_LIBRARY_PATHS.append(arviz_style_path)
+style.core.reload_library()</pre>
+        </section>
+
+        <section>
+            <h2>Wrap common plots in functions</h2>
+            <p>
+                Our goal is to ease and encourage the use of plots, and after updating stylesheets, it is easy to start
+                writing small functions implementing default behavior.
+            </p>
+            <pre class=code>def confetti(N, *, ax=None, **kwargs):
     if ax is None:
         ax = plt.gca()
     my_artists = ax.plot(*np.random.randn(N, 2),
                          clip_on=False, **kwargs)
-    return my_artists
-</code></pre>
-                <pre class="fragment"><code class="python" data-trim data-noescape>
-def solitare(x, *, ax=None, **kwargs):
+    return my_artists</pre>
+            <p> A few notes on this function:</p>
+            <ul>
+                <li>The <code>*</code> in the arguments is a Python 3 feature that requires the user to supply
+                    exactly <em>one</em> positional argument: <code>confetti(10, ax)</code> throws an error, while
+                    <code>confetti(10, ax=ax)</code> works.</li>
+                <li>The block that handles <code>if ax is None:</code> will get the current axes or create a new
+                    one. If we had wanted, we could have <em>always</em> created new axes using
+                    <code>plt.subplots()</code>. Calling plot on a pandas <code>Series</code> uses
+                    <code>plt.gca</code> while a <code>DataFrame</code> uses <code>plt.subplots</code>. This is a
+                    domain-specific choice!</li>
+                <li>We pass on keyword arguments other than <code>ax</code> to the underlying matplotlib function.
+                </li>
+                <li>The function returns all the Artists added to the axes, for the user to customize.</li>
+            </ul>
+            <p>
+                We might also implement a more general version of the curvy plot from above:
+            </p>
+            <pre class=code>def solitare(x, *, ax=None, **kwargs):
     if ax is None:
         ax = plt.gca()
     kwargs.setdefault('clip_on', False)
@@ -325,102 +384,100 @@ def solitare(x, *, ax=None, **kwargs):
                          x, np.sin(x),
                          x, -np.cos(x),
                          **kwargs)
-    return my_artists
-</code></pre>
-            </section>
+    return my_artists</pre>
+            <p>Now we can use these plots in three ways: </p>
+            <h3>On their own:</h3>
+            <pre class=code>confetti(42)</pre>
+            <figure>
+                <img src="img/sparks.png" />
+            </figure>
+            <h3>On the same axes:</h3>
+            <pre class=code>confetti(20, marker="*", markersize=50)
+confetti(87, markersize=10)</pre>
+            <figure>
+                <img src="img/multisparkles.png" />
+            </figure>
+            <h3>On multiple axes:</h3>
+            <pre class=code>fig, (ax1,ax2) = plt.subplots(nrows=2)
+solitare(np.linspace(-np.pi, np.pi), ax=ax1, markersize=30, marker='$\infty$')
+confetti(13, ax=ax2, marker='>')</pre>
+            <figure>
+                <img src="img/combined_axis.png" />
+            </figure>
+        </section>
 
-            <section>
-                <h3>Use Your New Plotting Methods </h3>
-                <pre><code class="python" data-trim data-noescape>
-_ = confetti(42)
-</code></pre>
-                <img height=300 data-src="img/sparks.png" />
-            </section>
-
-            <section>
-                <h3>Customize Your Plots</h3>
-                <pre><code class="python" data-trim data-noescape>
-        _ = confetti(20, marker='*', markersize=50)
-        _ = confetti(87, markersize=10)
-        </code></pre>
-                <img height=300 data-src="img/multisparkles.png" />
-            </section>
-
-            <section>
-                <h3>Compose Your Plots</h3>
-                <pre><code class="python" data-trim data-noescape>
-    fig, (ax1,ax2) = plt.subplots(nrows=2)
-    _ = solitare(np.linspace(-np.pi, np.pi), ax=ax1,
-                    markersize=30, marker='$\infty$')
-    _ = confetti(13, ax=ax2, marker='>')
-    </code></pre>
-                <img height=300 data-src="img/combined_axis.png" />
-            </section>
-            <section>
-                <h3>Build custom plots with Artists</h3>
-                <p>
-                    <img width=450 data-src="img/original_color.png" />
-                    <img width=450 data-src="img/final.png" />
-                </p>
-            </section>
-            <section data-background-image="img/original_color.png">
-            </section>
-
-            <section data-background-image="img/original.png">
-            </section>
-
-            <section data-background-image="img/mask.png">
-            </section>
-
-            <section data-background-image="img/pete_mask.png">
-            </section>
-
-            <section data-background-image="img/smooth_mask.png">
-            </section>
-
-            <section data-background-image="img/pete_smooth.png">
-            </section>
-
-            <section data-background-image="img/pete_thresh.png">
-            </section>
-
-            <section data-background-image="img/pete_zones.png">
-            </section>
-
-            <section data-background-image="img/pete_final_no_smooth.png">
-            </section>
-
-            <section data-background-image="img/pete_final_wide.png">
-            </section>
-
-            <section data-background-image="img/final.png">
-            </section>
-
-            <section data-background-image="img/final_color.png">
-            </section>
-
-            <section>
-                <pre><code class="python" data-trim data-noescape>
-fig, ax = plt.subplots()
+        <section>
+            <h2>Build Custom Plots with <code>Artist</code>s</h2>
+            <p>Sometimes your goal visualization requires more customization or performance than the high level
+                functions that matplotlib provides. This is where we start accessing functions from matplotlib the
+                <em>library</em>, rather than the <em>application</em>. Specifically, we will be using built-in
+                <code>Artist</code>s, which are the building blocks functions like <code>plot</code> and
+                <code>scatter</code> are already using.
+            </p>
+            <p>As an example of a custom functionality we may need, Colin is a fan of his dog<label for="petename"
+                    class="margin-toggle sidenote-number"></label><input type="checkbox" id="petename"
+                    class="margin-toggle" /> <span class=sidenote>He thinks it is important you know that his name is
+                    Pete, and that he is a good boy.</span> and of hacking on images.
+                We want to convert an image like this
+            </p>
+            <figure>
+                <img src="img/original_color.png" />
+            </figure>
+            <p>To one like this</p>
+            <figure>
+                <img src="img/final.png" />
+            </figure>
+            <p>You can see the code in the <a href="notebooks/line_image.py">attached Python file</a>, but there is a
+                step<label for="process" class="margin-toggle sidenote-number"></label><input type="checkbox"
+                    id="process" class="margin-toggle" /> <span class=sidenote>
+                        The process ends up looking like this: We convert to grayscale
+                    <img src="img/original.png">
+                    Create a blurred mask of white and black rows
+                    <img src="img/smooth_mask.png">
+                    Pointwise multiply the grayscale image (which is just a numpy array of intensities) with the smooth mask
+                    <img src="img/pete_smooth.png">
+                    Threshold the image, setting pixels darker than a certain level to black, and the rest to white
+                    <img src="img/pete_thresh.png">
+                    Divide into regions, and calculate how wide our lines should be at every x-position
+                    <img src="img/pete_zones.png">
+                    Convert the image into lines of varying width (for which we need custom functionality!)
+                    <img src="img/pete_final_no_smooth.png">
+                    Make the lines wider, so it looks nicer
+                    <img src="img/pete_final_wide.png">
+                    Smooth out the line widths, using a smoothing kernel
+                    <img src="img/final.png">
+                </span> where we need to
+                make a line (in fact 30 lines) with a width
+                that varies. This is not built into
+                matplotlib, so we will build it ourselves.</p>
+            <h3>Using <code>LineCollection</code> to build a custom plot</h3>
+            <p>First, we find the <a
+                    href="https://matplotlib.org/3.1.1/api/collections_api.html#matplotlib.collections.LineCollection">LineCollection</a>
+                artist, and see that it allows multiple lines with mapped colors.</p>
+            <p>Next, we see how it works:</p>
+            <pre class=code>fig, ax = plt.subplots()
 lc = LineCollection(
     segments=[
         ((0, 1), (1, 1), (2, 1), (3, 1)), # flat line
         ((0, 1), (1, 2), (2, 3), (3, 4)), # straight line
         ((0, 0), (1, 2), (2, 4), (3, 9)), # parabola
-    ],
-)
+    ])
 ax.add_collection(lc)
 ax.set_ylim(0, 9)
-ax.set_xlim(0, 3)
-</code></pre>
-                <p>
-                    <img height=350 data-src="img/lc1.png" />
-                </p>
-            </section>
-
-            <section>
-                <pre><code class="python" data-trim data-noescape>
-...
+ax.set_xlim(0, 3)</pre>
+            <figure>
+                <img src="img/lc1.png" />
+            </figure>
+            <p>We notice a few things about the API:</p>
+            <ol>
+                <li>Initializing the class returns an instance, and we use <code>ax.add_collection(...)</code> to add
+                    this artist collection to the axes.</li>
+                <li>We then also manually set the axis limits.</li>
+            </ol>
+            <p>This is going to be more fine-grained control, and we will have to be more specific about what we plot.
+            </p>
+            <p>Now we can apply some styles to the lines:</p>
+            <pre class=code>...
 lc = LineCollection(
     segments=...,
     colors=('red', 'green', 'blue'),
@@ -428,16 +485,13 @@ lc = LineCollection(
     linestyles=('dashed', 'dotted', 'solid')
 
 )
-...
-</code></pre>
-                <p>
-                    <img height=400 data-src="img/lc2.png" />
-                </p>
-            </section>
-
-            <section>
-                <pre><code class="python" data-trim data-noescape>
-...
+...</pre>
+            <figure>
+                <img src="img/lc2.png" />
+            </figure>
+            <p>This is not quite what we want: each line has a separate style applied to it. What if instead, we make
+                our single line out of a bunch of lines of length 1? </p>
+            <pre class=code>...
 lc = LineCollection(
     segments=[
         ((0, 0), (1, 2)),
@@ -445,16 +499,13 @@ lc = LineCollection(
         ((2, 4), (3, 9))
     ], ...
 )
-...
-</code></pre>
-                <p>
-                    <img height=400 data-src="img/lc3.png" />
-                </p>
-            </section>
-
-            <section>
-                <h2>Working with LineCollection</h2>
-                <pre><code class="python" data-trim data-noescape>
+...</pre>
+            <figure>
+                <img src="img/lc3.png" />
+            </figure>
+            <p>This looks like what we want! Notice that we used the endpoint of one segment as the start point of the
+                next segment. But four points of a parabola is boring: how do we scale this up?</p>
+            <pre class=code>...
 x = np.linspace(-2, 2)
 y = x ** 2
 
@@ -463,44 +514,35 @@ points = np.vstack((x, y)).T
 #       [-1.91836735,  3.68013328],
 #       [-1.83673469,  3.37359434],
 #       [-1.75510204,  3.08038317],...
-segments = list(zip(points[:-1], points[1:]))
-</code></pre>
-            </section>
-
-            <section>
-                <pre><code class="python" data-trim data-noescape>
-fig, ax = plt.subplots()
+segments = list(zip(points[:-1], points[1:]))</pre>
+            <p>We create an \(N \times 2\) matrix of points on our line, and zip it with itself, offset by 1. This gives
+                us the same sort of data as we had before: a list of \(N - 1\) "lines" of length 1, where the end point
+                of one is the start point of the next. Putting this together, we can plot this:</p>
+            <pre class=code>fig, ax = plt.subplots()
 
 lc = LineCollection(segments=segments)
 
 ax.add_collection(lc)
 ax.set_ylim(-0.2, 4)
-ax.set_xlim(-2, 2)
-</code></pre>
-                <p>
-                    <img height=400 data-src="img/lc4.png" />
-                </p>
-            </section>
-
-            <section>
-                <pre><code class="python" data-trim data-noescape>
-linewidths = 30 * np.abs(np.sin(10 * x))
+ax.set_xlim(-2, 2)</pre>
+            <figure>
+                <img src="img/lc4.png" />
+            </figure>
+            <p>Looking better! But we want to change linewidths along the length of this. We can do that by just passing
+                a vector of the same length as the x-data:</p>
+            <pre class=code>linewidths = 30 * np.abs(np.sin(10 * x))
 ...
 
 lc = LineCollection(
     segments=segments,
     linewidths=linewidths
 )
-...
-</code></pre>
-                <p>
-                    <img height=400 data-src="img/lc5.png" />
-                </p>
-            </section>
-
-            <section>
-                <pre><code class="python" data-trim data-noescape>
-cmap = plt.get_cmap('viridis')
+...</pre>
+            <figure>
+                <img src="img/lc5.png" />
+            </figure>
+            <p>While we are at it, we can edit other styles like color as well:</p>
+            <pre class=code>cmap = plt.get_cmap('viridis')
 ...
 
 lc = LineCollection(
@@ -508,17 +550,15 @@ lc = LineCollection(
     linewidths=linewidths,
     colors=cmap(np.abs(np.sin(5 * x))),
 )
-...
-</code></pre>
-                <p>
-                    <img height=400 data-src="img/lc6.png" />
-                </p>
-            </section>
-
-            <section>
-                <h3>Light wrappers for your use</h3>
-                <pre><code class="python" data-trim data-noescape>
-def plot_line(x, y, linewidths=None, colors=None, ax=None):
+...</pre>
+            <figure>
+                <img src="img/lc6.png" />
+            </figure>
+            <h3>Make light wrappers for your use!</h3>
+            <p>To keep pushing a point, you should make small functions and wrappers to make these plots easier for
+                yourself and for others: your plotting should understand your domain. Here is the function to implement
+                the flexible line plotting API we were just exploring:</p>
+            <pre class=code>def plot_line(x, y, linewidths=None, colors=None, ax=None):
     points = np.vstack((x, y)).T
     segments = list(zip(points[:-1], points[1:]))
     if ax is None:
@@ -531,110 +571,77 @@ def plot_line(x, y, linewidths=None, colors=None, ax=None):
     )
     ax.add_collection(lc)
     #  ...mess with scales...
-    return lc
-</code></pre>
-            </section>
-
-            <section>
-                <pre><code class="python" data-trim data-noescape>
-x = np.linspace(-2, 2)
-y = x ** 2
-linewidths = 30 * np.abs(np.sin(10 * x))
-colors = plt.get_cmap('viridis')(np.abs(np.sin(5 * x)))
-
-# Our custom function!
-plot_line(x, y,
-          linewidths=linewidths,
-          colors=colors)
-</code></pre>
-                <p>
-                    <img height=400 data-src="img/lc7.png" />
-                </p>
-            </section>
-
-            <section>
-                <pre><code class="python" data-trim data-noescape>
-t = np.linspace(0, np.pi * 2.0, 2_000)
-cmap = plt.get_cmap('rainbow')
+    return lc</pre>
+            <p>Note we used the pattern from earlier with <code>plt.gca()</code>. This is not much code, but it enables
+                lots of exploration. We can play around with other parametric plots and be creative like with the
+                parabola earlier. Here is a Möbius strip:</p>
+            <pre class=code>t = np.linspace(0, np.pi * 2.0, 2_000)
+cmap = plt.get_cmap('twilight')
 colors = cmap(np.abs(np.cos(t * 1.25)))
 
 plot_line(np.cos(t), np.sin(t), # circle
           linewidths=40 * np.cos(1.5 * t), # 3 turns
           colors=colors)
-ax.axis('off')
-</code></pre>
-                <p>
-                    <img height=400 data-src="img/lc8.png" />
-                </p>
-            </section>
-            <section>
-                <h3>Share Your Library </h3>
-                <p>Package like any standard Python package 🙃</p>
-                <p>We love to help:</p>
-                <a href=https://discourse.matplotlib.org/c/development/3rdparty>discourse.matplotlib.org/c/development/3rdparty
-                    </a> </section> <section>
-                    <h3>Matplotlib is a Library & an Application</h3>
-                    <p>This is a source of... <em class='fragment'>tension</em></p>
-                    <p class='fragment'>A library wants to help you build tools</p>
-                    <p class='fragment'>An application wants to help you do something</p>
-                    <p class='fragment'>A library should be explicit</p>
-                    <p class='fragment'>An application should "do the right thing"...</p>
-                    <p class='fragment'>...but "the right thing" is very subjective</p>
+ax.axis('off')</pre>
+            <figure>
+                <img src="img/lc8.png" />
+            </figure>
+            <p>We can also go back to our motivating example with Pete the pup, and try out the control we also have
+                over color now:</p>
 
-            </section>
+            <figure>
+                <img src="img/final_color.png" />
+            </figure>
 
-            <section>
-                <h2>Build the interface you need</h2>
-
+        </section>
+        <section>
+            <h2>Conclusion: Build the interface you need</h2>
+            <p>Your plotting should understand your domain, and there are many levels at which this understanding can
+                take place. In rough order of depth:</p>
+            <ol>
+                <li>Use a stylesheet to create a distinctive, consistent look.</li>
+                <li>Write wrappers around <code>ax.plot</code>, <code>ax.scatter</code>, <code>ax.hist</code>, and the
+                    like to build the API <em>you</em> want.</li>
+                <li>Write your own functions that instantiate <code>Artist</code>s like <code>LineCollection</code>.
+                </li>
+                <li>Write your own <code>Artist</code> classes that reimplement <code>draw</code><label for="draw"
+                        class="margin-toggle sidenote-number"></label><input type="checkbox" id="draw"
+                        class="margin-toggle" /> <span class=sidenote>We did not cover implementing a custom Artist
+                        here, since it is a much bigger topic than a 30 minute talk. This is very powerful, and very
+                        flexible. See <a href="https://github.com/networkx/grave">grave</a> for an example of
+                        this.</span>.</li>
+            </ol>
+            <p>Matplotlib is an active library, and is interested in helping science advance, and helping you better
+                visualize your data<label for="data" class="margin-toggle sidenote-number"></label><input
+                    type="checkbox" id="data" class="margin-toggle" /> <span class=sidenote>Or dog.</span>. In
+                particular,
                 <ul>
-                    <li class='fragment'>Write wrappers around Axes methods</li>
-                    <li class='fragment'>Write your own functions that instantiate Artists</li>
-                    <li class='fragment'>Write your own Artist classes that reimplement draw</li>
+                    <li>If you need help packaging your plotting library or stylesheet to be pip-installable, <a
+                            href="https://discourse.matplotlib.org/c/development/3rdparty">reach out</a>! Packaging is
+                        hard, and we want you to succeed.</li>
+                    <li>If you have other general questions, join the discussion on <a
+                            href="https://discourse.matplotlib.org/">matplotlib's new discourse</a>.</li>
+                    <li>Share what you build, if you are comfortable! A <a href="https://twitter.com/matplotlib">twitter
+                            account</a> shares beautiful plots, <a
+                            href="https://matplotlib.org/thirdpartypackages/index.html">the third party package
+                            listing</a> spreads the word of domain-specific libraries, and of course<a
+                            href="https://github.com/matplotlib/matplotlib/issues">issues</a> and <a
+                            href="https://github.com/matplotlib/matplotlib/pulls">pull requests</a> may be filed.</li>
                 </ul>
 
-                <div class='fragment'>
-                    <p>Talk to us!</p>
-                    <a href="https://discourse.matplotlib.org/c/development/3rdparty">discourse.matplotlib.org</a>
-                </div>
-            </section>
-
-
-        </div>
-    </div>
-
-    <script src="js/reveal.js"></script>
-
-    <script>
-        // More info about config & dependencies:
-        // - https://github.com/hakimel/reveal.js#configuration
-        // - https://github.com/hakimel/reveal.js#dependencies
-        Reveal.initialize({
-            dependencies: [{
-                src: 'plugin/markdown/marked.js'
-            },
-            {
-                src: 'plugin/markdown/markdown.js'
-            },
-            {
-                src: 'plugin/notes/notes.js',
-                async: true
-            },
-            {
-                src: 'plugin/highlight/highlight.js',
-                async: true
-            },
-            {
-                src: 'plugin/math/math.js',
-                async: true
-            },
-            ],
-            history: true,
-            math: {
-                mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
-                config: 'TeX-AMS_HTML-full' // See http://docs.mathjax.org/en/latest/config-files.html
-            },
-        });
-    </script>
+        </section>
+    </article>
 </body>
+<footer>
+    <script type="text/javascript">
+        document._EUGO = 'd95b8c3c1393a0c4dd52';
+        document.head.appendChild(function () {
+            var s = document.createElement('script');
+            s.src = 'https://eugo.io/eugo.js';
+            s.async = 1;
+            return s;
+        }());
+    </script>
+</footer>
 
 </html>
